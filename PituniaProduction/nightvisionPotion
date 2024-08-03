@@ -1,6 +1,4 @@
-VisualSection:CreateButton({
-    Name = "Night vision",
-    Callback = function()
+Callback = function()
         local Light = game:GetService("Lighting")
         function dofullbright()
             Light.Ambient = Color3.new(1, 1, 1)
