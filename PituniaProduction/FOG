@@ -1,0 +1,12 @@
+local function RemoveFog()
+    local Lighting = game:GetService("Lighting")
+
+    if Lighting:FindFirstChildOfClass("Atmosphere") then
+        Lighting:FindFirstChildOfClass("Atmosphere"):Destroy()
+    end
+
+    Lighting.FogEnd = 1000000
+    Lighting.FogStart = 1000000
+end
+
+RemoveFog()
