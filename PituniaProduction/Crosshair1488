@@ -118,7 +118,7 @@ UserInputService.InputBegan:Connect(function(Input)
         
         if _G.SendNotifications == true then
             game:GetService("StarterGui"):SetCore("SendNotification",{
-                Title = "Exunys Developer";
+                Title = "guiddo806 developer";
                 Text = "The crosshair's visibility is now set to "..tostring(_G.CrosshairVisible)..".";
                 Duration = 5;
             })
