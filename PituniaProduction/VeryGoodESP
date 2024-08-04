@@ -42,7 +42,7 @@ local function CreateBoxESP()
                 local Camera = workspace.CurrentCamera
 
                 local Distance = (Camera.CFrame.p - HumanoidRootPart.Position).magnitude
-                local DistanceText = string.format("%.1f studs", Distance)
+                local DistanceText = string.format("%.1f s", Distance)
 
                 local Target2dPosition, IsVisible = Camera:WorldToViewportPoint(HumanoidRootPart.Position)
                 local scale_factor = 1 / (Target2dPosition.Z * math.tan(math.rad(Camera.FieldOfView * 0.5)) * 2) * 100
