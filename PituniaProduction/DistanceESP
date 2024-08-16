@@ -16,14 +16,14 @@ local function CreateDistanceLabelESP()
                 local Camera = workspace.CurrentCamera
 
                 local Distance = (Camera.CFrame.p - HumanoidRootPart.Position).magnitude
-                local DistanceText = string.format("[%d] m", math.floor(Distance))
+                local DistanceText = string.format("[%d] s", math.floor(Distance))
 
-                local Target2dPosition, IsVisible = Camera:WorldToViewportPoint(HumanoidRootPart.Position)
-                
-                -- Смещение позиции метки вниз относительно игрока
-                local offsetY = 50 -- Вы можете настроить значение смещения
+                -- Получаем позицию ног игрока
+                local lowerPosition = HumanoidRootPart.Position - Vector3.new(0, HumanoidRootPart.Size.Y / 2, 0)
+                local Target2dPosition, IsVisible = Camera:WorldToViewportPoint(lowerPosition)
+
                 DistanceLabel.Visible = IsVisible
-                DistanceLabel.Position = Vector2.new(Target2dPosition.X, Target2dPosition.Y + offsetY)
+                DistanceLabel.Position = Vector2.new(Target2dPosition.X, Target2dPosition.Y)
                 DistanceLabel.Text = DistanceText
             else
                 DistanceLabel.Visible = false
@@ -58,3 +58,4 @@ end
 
 local DistanceESP = CreateDistanceLabelESP()
 DistanceESP.EnableDistanceLabelESP()
+()
