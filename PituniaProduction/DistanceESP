@@ -1,62 +1,70 @@
 local function CreateDistanceLabelESP()
     local DistanceLabelESP = {}
 
-    function DistanceLabelESP.CreateDistanceLabel(Player)
-        local DistanceLabel = Drawing.new("Text")
-        DistanceLabel.Visible = false
-        DistanceLabel.Size = 14
-        DistanceLabel.Color = Color3.fromRGB(128, 0, 128)
-        DistanceLabel.Center = true
-        DistanceLabel.Outline = false
+function DistanceLabelESP.CreateDistanceLabel(Player)
+    local DistanceLabel = Drawing.new("Text")
+    DistanceLabel.Visible = false
+    DistanceLabel.Size = 14
+    DistanceLabel.Color = Color3.fromRGB(128, 0, 128) 
+    DistanceLabel.Center = true
+    DistanceLabel.Outline = false
 
-        local Updater
-        local function UpdateDistanceLabel()
-            if Player and Player:IsA("Model") and Player:FindFirstChild("HumanoidRootPart") then
-                local HumanoidRootPart = Player.HumanoidRootPart
-                local Camera = workspace.CurrentCamera
+    local Updater
+    local function UpdateDistanceLabel()
+        if Player and Player:IsA("Model") and Player:FindFirstChild("HumanoidRootPart") and Player:FindFirstChild("Head") then
+            local HumanoidRootPart = Player.HumanoidRootPart
+            local Head = Player.Head
+            local Camera = workspace.CurrentCamera
 
-                local Distance = (Camera.CFrame.p - HumanoidRootPart.Position).Magnitude
-                local DistanceText = string.format("[%d] m", math.floor(Distance))
+            local Distance = (Camera.CFrame.p - HumanoidRootPart.Position).magnitude
+            local DistanceText = string.format("[ %d ] s", math.floor(Distance))  
 
-                -- Получаем позицию ног игрока, используя размер Torso/UpperTorso или другую часть тела
-                local lowerPosition = HumanoidRootPart.Position - Vector3.new(0, 3, 0) -- Сдвигаем позицию на 3 студии ниже
+            local Target2dPosition, IsVisible = Camera:WorldToViewportPoint(HumanoidRootPart.Position)
+            local scale_factor = 1 / (Target2dPosition.Z * math.tan(math.rad(Camera.FieldOfView * 0.5)) * 2) * 100
+            local width, height = math.floor(18 * scale_factor * 3), math.floor(28 * scale_factor * 3) 
 
-                local Target2dPosition, IsVisible = Camera:WorldToViewportPoint(lowerPosition)
+            DistanceLabel.Visible = IsVisible
+            DistanceLabel.Position = Vector2.new(Target2dPosition.X, Target2dPosition.Y + Box.Size.Y / 2 + 10)
+            DistanceLabel.Text = DistanceText
 
-                DistanceLabel.Visible = IsVisible
-                DistanceLabel.Position = Vector2.new(Target2dPosition.X, Target2dPosition.Y)
-                DistanceLabel.Text = DistanceText
-            else
-                DistanceLabel.Visible = false
-                if not Player then
-                    DistanceLabel:Remove()
-                    Updater:Disconnect()
-                end
+
+        else
+            DistanceLabel.Visible = false
+            if not Player then 
+                DistanceLabel:Remove()  
+                Updater:Disconnect()
             end
         end
+    end
 
         Updater = game:GetService("RunService").RenderStepped:Connect(UpdateDistanceLabel)
         return DistanceLabel
     end
 
-    function DistanceLabelESP.EnableDistanceLabelESP()
+    local DistanceLabelESP = ()
+
+    function DistanceLabelESP.Enable()
         for _, Player in pairs(game:GetService("Workspace"):GetChildren()) do
-            if Player:IsA("Model") and Player:FindFirstChild("HumanoidRootPart") then
-                DistanceLabelESP.CreateDistanceLabel(Player)
+            if Player:IsA("Model") and Player:FindFirstChild("HumanoidRootPart") and Player:FindFirstChild("Head") then
+                local  DistanceLabel = DistanceLabelESP.Create(Player)
+                table.insert(Distance, { DistanceLabel = DistanceLabel, })
             end
         end
-
-        -- Обработка новых игроков
-        game:GetService("Workspace").ChildAdded:Connect(function(Player)
-            if Player:IsA("Model") and Player:FindFirstChild("HumanoidRootPart") then
-                DistanceLabelESP.CreateDistanceLabel(Player)
-            end
-        end)
     end
 
-    return DistanceLabelESP
+    game.Workspace.DescendantAdded:Connect(function(i)
+        if i:IsA("Model") and i:FindFirstChild("HumanoidRootPart") and i:FindFirstChild("Head") then
+            local  DistanceLabel = DistanceESP.Create(i)
+            table.insert(Distance, { DistanceLabel = DistanceLabel })
+        end
+    end)
+
+    function DistanceESP.Disable()
+        for _, BoxData in pairs(Distance) do
+            BoxData.DistanceLabel:Remove()  
+        end
+        DistanceLabel = {}
+    end
+
+    return DistanceESP
 end
-
-local DistanceESP = CreateDistanceLabelESP()
-DistanceESP.EnableDistanceLabelESP()
-
