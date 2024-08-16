@@ -1,4 +1,3 @@
-loadstring([[
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local Camera = workspace.CurrentCamera
@@ -37,4 +36,3 @@ updateFOV()
 end)
 
 print("FOV Changer script loaded successfully. Use '+' to increase FOV and '-' to decrease FOV.")
-]])()
