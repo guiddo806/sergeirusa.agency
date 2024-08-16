@@ -163,16 +163,3 @@ local function CreateBoxESP()
 end
 
 local ESP = CreateBoxESP()
-
-ESPSection:AddToggle({
-    Name = "Enable Box ESP",
-    Default = false,
-    Callback = function(Value)
-        BoxESPEnabled = Value
-        if Value then
-            ESP.Enable()
-        else
-            ESP.Disable()
-        end
-    end
-})
