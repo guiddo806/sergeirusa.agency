@@ -170,9 +170,9 @@ local Toggle = MiscTab:CreateToggle({
     Flag = "ToggleBoxESP",
     Callback = function(Value)
         if Value then
-            EnableBoxESP()
+            ESP.Enable()  
         else
-            DisableBoxESP()
+            ESP.Disable() 
         end
     end,
-}
+})
