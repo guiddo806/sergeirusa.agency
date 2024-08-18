@@ -163,3 +163,16 @@ local function CreateBoxESP()
 end
 
 local ESP = CreateBoxESP()
+
+local Toggle = MiscTab:CreateToggle({
+    Name = "BoxESP",
+    CurrentValue = false,
+    Flag = "ToggleBoxESP",
+    Callback = function(Value)
+        if Value then
+            EnableBoxESP()
+        else
+            DisableBoxESP()
+        end
+    end,
+}
