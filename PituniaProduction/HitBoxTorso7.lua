@@ -10,6 +10,7 @@ if (not _G.Flags) then
 			Distance = false;
 			VisibleCheck = false;
 			Sleepers = false;
+			Enabled = true; -- Добавлено состояние для включения/отключения ESP
 		};
 		HitboxExpander = {
 			Size = 7;
@@ -19,6 +20,7 @@ if (not _G.Flags) then
 		};
 	};
 end
+
 if (not _G.Loaded) then
 	_G.Loaded = true;
 	local ReplicatedStorage = game:GetService("ReplicatedStorage");
@@ -32,15 +34,14 @@ if (not _G.Loaded) then
 
 	local SleepAnimationId = "rbxassetid://13280887764"
 	
-for i,v in pairs(ReplicatedStorage.Shared.entities.Player.Model:GetChildren()) do
+	for i,v in pairs(ReplicatedStorage.Shared.entities.Player.Model:GetChildren()) do
 		if v:IsA("BasePart") then
 			OriginalSizes[v.Name] = v.Size;
 		end
 	end
 
-
 	for i,v in pairs(Items:GetChildren()) do
-		v:SetAttribute("RealName",v.Name);--[v.DataCost] = v.Name;
+		v:SetAttribute("RealName",v.Name);
 	end
 
 	function IsSleeping(Player)
@@ -89,17 +90,17 @@ for i,v in pairs(ReplicatedStorage.Shared.entities.Player.Model:GetChildren()) d
 		return Model.ClassName == "Model" and Model:FindFirstChild("Head") and Model.PrimaryPart~=nil;
 	end
 
-	function SetColor(Billboard,Color) 
+	function SetColor(Billboard, Color) 
 		Billboard.PlayerName.TextColor3 = Color;
 		Billboard.PlayerDistance.TextColor3 = Color;
 		Billboard.PlayerWeapon.TextColor3 = Color;
 		Billboard.Box.UIStroke.Color = Color;
 	end
 
-	function HitboxExpander(Model,Size,Hitbox)
+	function HitboxExpander(Model, Size, Hitbox)
 		if (Hitbox.Enabled) then
 			local Part = Model[Hitbox.Part];
-			Part.Size = Vector3.new(Size,Size,Size);
+			Part.Size = Vector3.new(Size, Size, Size);
 			Part.Transparency = Hitbox.Transparency;
 			Part.CanCollide = false;
 		else
@@ -111,10 +112,27 @@ for i,v in pairs(ReplicatedStorage.Shared.entities.Player.Model:GetChildren()) d
 	end
 
 	local HasESP = {};
+	
+	function ToggleESP(state)
+		_G.Flags.ESP.Enabled = state;
+	end
+	
+	function ToggleHitboxExpander(state)
+		_G.Flags.HitboxExpander.Enabled = state;
+	end
+	
 	RunService.Heartbeat:Connect(function()
 		local ESP =  _G.Flags.ESP;
 		local Hitbox = _G.Flags.HitboxExpander;
-		for i,v in pairs(workspace:GetChildren()) do
+		if not ESP.Enabled then
+			-- Если ESP отключен, просто очистить ESP
+			for i, v in pairs(HasESP) do
+				v.Enabled = false;
+			end
+			return;
+		end
+
+		for i, v in pairs(workspace:GetChildren()) do
 			if (HasESP[v] or IsPlayer(v)) then
 				if (HasESP[v] == nil) then
 					local Billboard = CreateESP();
@@ -124,15 +142,15 @@ for i,v in pairs(ReplicatedStorage.Shared.entities.Player.Model:GetChildren()) d
 					local Billboard = HasESP[v];
 					local PrimaryPosition = v.PrimaryPart.Position;
 					local Origin = CurrentCamera.CFrame.Position;
-					local Distance = (Origin-PrimaryPosition).Magnitude;
-					HitboxExpander(v,Hitbox.Size,Hitbox);
+					local Distance = (Origin - PrimaryPosition).Magnitude;
+					HitboxExpander(v, Hitbox.Size, Hitbox);
 					local Sleeping = IsSleeping(v);
 					if ((Distance > ESP.DistanceLimit) or (not ESP.Sleepers and Sleeping)) then
 						Billboard.Enabled = false;
 						continue;
 					end
 
-					Billboard.Enabled = false;
+					Billboard.Enabled = true;
 					Billboard.Adornee = v.PrimaryPart;
 
 					Billboard.Box.Visible = ESP.Box;
@@ -143,16 +161,18 @@ for i,v in pairs(ReplicatedStorage.Shared.entities.Player.Model:GetChildren()) d
 					Billboard.PlayerDistance.Text = math.round(Distance) .. "s";
 					Billboard.PlayerWeapon.Text = PlayerWeapon(v);
 					
-if (v.Head.Nametag.tag.Text ~= "") then
-     Billboard.PlayerName.Text = v.Head.Nametag.tag.Text;
-end 
-			local Params = RaycastParams.new();
-					Params.FilterDescendantsInstances = {IgnoreFolder,v};
+					if (v.Head.Nametag.tag.Text ~= "") then
+						Billboard.PlayerName.Text = v.Head.Nametag.tag.Text;
+					end 
+
+					local Params = RaycastParams.new();
+					Params.FilterDescendantsInstances = {IgnoreFolder, v};
 					local Direction = PrimaryPosition - Origin;
-					local Raycast = workspace:Raycast(Origin,Direction,Params);
+					local Raycast = workspace:Raycast(Origin, Direction, Params);
 					SetColor(Billboard, if (not Raycast or not ESP.VisibleCheck) then ESP.VisibleColor else ESP.NotVisibleColor);
 				end	
 			end
 		end
 	end)
 end
+
