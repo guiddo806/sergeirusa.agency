@@ -1,17 +1,5 @@
 if (not _G.Flags) then
 	_G.Flags = {
-		ESP = {
-			NotVisibleColor = Color3.fromRGB(255,0,0);
-			VisibleColor = Color3.fromRGB(0,255,0);	
-			DistanceLimit = 0;
-			Box = false;
-			Name = false;
-			Weapon = false;
-			Distance = false;
-			VisibleCheck = false;
-			Sleepers = false;
-			Enabled = true; -- Добавлено состояние для включения/отключения ESP
-		};
 		HitboxExpander = {
 			Size = 7;
 			Enabled = true;
@@ -54,33 +42,6 @@ if (not _G.Loaded) then
 		return false;
 	end
 
-	function CreateESP()
-		local BillboardGui = Instance.new("BillboardGui")
-		local Box = Instance.new("Frame")
-		local PlayerName = Instance.new("TextLabel")
-		local PlayerWeapon = Instance.new("TextLabel")
-		local PlayerDistance = Instance.new("TextLabel")
-		local UIStroke = Instance.new("UIStroke")
-		--Properties:
-
-		BillboardGui.Parent = CoreGui;
-		BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-		BillboardGui.Active = true
-		BillboardGui.AlwaysOnTop = true
-		BillboardGui.LightInfluence = 1.000
-		BillboardGui.Size = UDim2.new(500, 0, 800, 0)
-
-
-		UIStroke.Name = "UIStroke"
-		UIStroke.Parent = Box;
-		UIStroke.Thickness = 1;
-		UIStroke.Color = Color3.fromRGB(0,255,0);
-		UIStroke.LineJoinMode = Enum.LineJoinMode.Miter;
-
-
-		return BillboardGui;
-	end
-
 	function PlayerWeapon(Player)
 		local Model = Player:FindFirstChildOfClass("Model");
 		return Model and Model:GetAttribute("RealName") or "None";
@@ -88,13 +49,6 @@ if (not _G.Loaded) then
 
 	function IsPlayer(Model)
 		return Model.ClassName == "Model" and Model:FindFirstChild("Head") and Model.PrimaryPart~=nil;
-	end
-
-	function SetColor(Billboard, Color) 
-		Billboard.PlayerName.TextColor3 = Color;
-		Billboard.PlayerDistance.TextColor3 = Color;
-		Billboard.PlayerWeapon.TextColor3 = Color;
-		Billboard.Box.UIStroke.Color = Color;
 	end
 
 	function HitboxExpander(Model, Size, Hitbox)
@@ -111,68 +65,13 @@ if (not _G.Loaded) then
 		end
 	end
 
-	local HasESP = {};
-	
-	function ToggleESP(state)
-		_G.Flags.ESP.Enabled = state;
-	end
-	
-	function ToggleHitboxExpander(state)
-		_G.Flags.HitboxExpander.Enabled = state;
-	end
-	
 	RunService.Heartbeat:Connect(function()
-		local ESP =  _G.Flags.ESP;
 		local Hitbox = _G.Flags.HitboxExpander;
-		if not ESP.Enabled then
-			-- Если ESP отключен, просто очистить ESP
-			for i, v in pairs(HasESP) do
-				v.Enabled = false;
-			end
-			return;
-		end
 
 		for i, v in pairs(workspace:GetChildren()) do
-			if (HasESP[v] or IsPlayer(v)) then
-				if (HasESP[v] == nil) then
-					local Billboard = CreateESP();
-					HasESP[v] = Billboard;
-					Billboard.Adornee = v.PrimaryPart;
-				elseif (HasESP[v] ~= nil) then
-					local Billboard = HasESP[v];
-					local PrimaryPosition = v.PrimaryPart.Position;
-					local Origin = CurrentCamera.CFrame.Position;
-					local Distance = (Origin - PrimaryPosition).Magnitude;
-					HitboxExpander(v, Hitbox.Size, Hitbox);
-					local Sleeping = IsSleeping(v);
-					if ((Distance > ESP.DistanceLimit) or (not ESP.Sleepers and Sleeping)) then
-						Billboard.Enabled = false;
-						continue;
-					end
-
-					Billboard.Enabled = true;
-					Billboard.Adornee = v.PrimaryPart;
-
-					Billboard.Box.Visible = ESP.Box;
-					Billboard.PlayerDistance.Visible = ESP.Distance;
-					Billboard.PlayerName.Visible = ESP.Name;
-					Billboard.PlayerWeapon.Visible = ESP.Weapon;
-
-					Billboard.PlayerDistance.Text = math.round(Distance) .. "s";
-					Billboard.PlayerWeapon.Text = PlayerWeapon(v);
-					
-					if (v.Head.Nametag.tag.Text ~= "") then
-						Billboard.PlayerName.Text = v.Head.Nametag.tag.Text;
-					end 
-
-					local Params = RaycastParams.new();
-					Params.FilterDescendantsInstances = {IgnoreFolder, v};
-					local Direction = PrimaryPosition - Origin;
-					local Raycast = workspace:Raycast(Origin, Direction, Params);
-					SetColor(Billboard, if (not Raycast or not ESP.VisibleCheck) then ESP.VisibleColor else ESP.NotVisibleColor);
-				end	
+			if IsPlayer(v) then
+				HitboxExpander(v, Hitbox.Size, Hitbox);
 			end
 		end
 	end)
 end
-
