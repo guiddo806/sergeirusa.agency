@@ -69,15 +69,6 @@ for i,v in pairs(ReplicatedStorage.Shared.entities.Player.Model:GetChildren()) d
 		BillboardGui.LightInfluence = 1.000
 		BillboardGui.Size = UDim2.new(500, 0, 800, 0)
 
-		Box.Name = "Box"
-		Box.Parent = BillboardGui
-		Box.AnchorPoint = Vector2.new(0.5, 0.5)
-		Box.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		Box.BackgroundTransparency = 1.000
-		Box.BorderColor3 = Color3.fromRGB(0, 0, 0)
-		Box.BorderSizePixel = 0
-		Box.Position = UDim2.new(0.5, 0, 0.5, 0)
-		Box.Size = UDim2.new(0.00899999961, 0, 0.00899999961, 0)
 
 		UIStroke.Name = "UIStroke"
 		UIStroke.Parent = Box;
@@ -85,52 +76,6 @@ for i,v in pairs(ReplicatedStorage.Shared.entities.Player.Model:GetChildren()) d
 		UIStroke.Color = Color3.fromRGB(0,255,0);
 		UIStroke.LineJoinMode = Enum.LineJoinMode.Miter;
 
-
-		PlayerName.Name = "PlayerName"
-		PlayerName.Parent = BillboardGui
-		PlayerName.AnchorPoint = Vector2.new(0.5, 1)
-		PlayerName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		PlayerName.BackgroundTransparency = 1.010
-		PlayerName.BorderColor3 = Color3.fromRGB(0, 0, 0)
-		PlayerName.BorderSizePixel = 0
-		PlayerName.Position = UDim2.new(0.5, 0, 0.495499998, 0)
-		PlayerName.Size = UDim2.new(0, 100, 0, 10)
-		PlayerName.Font = Enum.Font.SourceSans
-		PlayerName.Text = "Player"
-		PlayerName.TextColor3 = Color3.fromRGB(0, 255, 8)
-		PlayerName.TextSize = 14.000
-		PlayerName.TextYAlignment = Enum.TextYAlignment.Bottom
-
-		PlayerWeapon.Name = "PlayerWeapon"
-		PlayerWeapon.Parent = BillboardGui
-		PlayerWeapon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		PlayerWeapon.BackgroundTransparency = 1.010
-		PlayerWeapon.BorderColor3 = Color3.fromRGB(0, 0, 0)
-		PlayerWeapon.BorderSizePixel = 0
-		PlayerWeapon.Position = UDim2.new(0.504499972, 0, 0.495499998, 0)
-		PlayerWeapon.Size = UDim2.new(0, 100, 0, 10)
-		PlayerWeapon.Font = Enum.Font.SourceSans
-		PlayerWeapon.Text = "Weapon"
-		PlayerWeapon.TextColor3 = Color3.fromRGB(0, 255, 8)
-		PlayerWeapon.TextSize = 14.000
-		PlayerWeapon.TextXAlignment = Enum.TextXAlignment.Left
-		PlayerWeapon.TextYAlignment = Enum.TextYAlignment.Bottom
-		PlayerWeapon.Visible = false;
-
-		PlayerDistance.Name = "PlayerDistance"
-		PlayerDistance.Parent = BillboardGui
-		PlayerDistance.AnchorPoint = Vector2.new(0.5, 0)
-		PlayerDistance.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		PlayerDistance.BackgroundTransparency = 1.010
-		PlayerDistance.BorderColor3 = Color3.fromRGB(0, 0, 0)
-		PlayerDistance.BorderSizePixel = 0
-		PlayerDistance.Position = UDim2.new(0.5, 0, 0.504999995, 5)
-		PlayerDistance.Size = UDim2.new(0, 100, 0, 10)
-		PlayerDistance.Font = Enum.Font.SourceSans
-		PlayerDistance.Text = "500"
-		PlayerDistance.TextColor3 = Color3.fromRGB(0, 255, 8)
-		PlayerDistance.TextSize = 14.000
-		PlayerDistance.TextYAlignment = Enum.TextYAlignment.Bottom
 
 		return BillboardGui;
 	end
