@@ -211,3 +211,17 @@ if (not _G.Loaded) then
         end
     end)
 end
+
+
+local Toggle = MiscTab:CreateToggle({
+    Name = "Box",
+    CurrentValue = false,
+    Flag = "ToggleESP",
+    Callback = function(Value)
+        if Value then
+            ESP.Enable()  
+        else
+            ESP.Disable() 
+        end
+    end,
+})
