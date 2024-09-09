@@ -1,24 +1,19 @@
 if (not _G.Flags) then
     _G.Flags = {
         ESP = {
-            NotVisibleColor = Color3.fromRGB(255,255,255);
-            VisibleColor = Color3.fromRGB(255,255,255); 
+            NotVisibleColor = Color3.fromRGB(255, 255, 255);
+            VisibleColor = Color3.fromRGB(255, 255, 255);
             DistanceLimit = 3000;
             Box = true;
             Name = true;
             Weapon = true;
             Distance = true;
-            VisibleCheck = true;
+            VisibleCheck = false;
             Sleepers = true;
-        };
-        HitboxExpander = {
-            Size = 7;
-            Enabled = false;
-            Transparency = .7; 
-            Part = "Head"; 
         };
     };
 end
+
 if (not _G.Loaded) then
     _G.Loaded = true;
     local ReplicatedStorage = game:GetService("ReplicatedStorage");
@@ -27,24 +22,17 @@ if (not _G.Loaded) then
     local CoreGui = game:GetService("CoreGui");
     local CurrentCamera = workspace.CurrentCamera;
     local IgnoreFolder = workspace:WaitForChild("Ignore");
-    local OriginalSizes = {};
     local WeaponInfo = {};
 
     local SleepAnimationId = "rbxassetid://13280887764"
-    
-    for i,v in pairs(ReplicatedStorage.Shared.entities.Player.Model:GetChildren()) do
-        if v:IsA("BasePart") then
-            OriginalSizes[v.Name] = v.Size;
-        end
-    end
 
-    for i,v in pairs(Items:GetChildren()) do
-        v:SetAttribute("RealName",v.Name);
+    for i, v in pairs(Items:GetChildren()) do
+        v:SetAttribute("RealName", v.Name);
     end
 
     function IsSleeping(Player)
         local Animations = Player.AnimationController:GetPlayingAnimationTracks();
-        for i,v in pairs(Animations) do
+        for i, v in pairs(Animations) do
             if (v.IsPlaying and v.Animation.AnimationId == SleepAnimationId) then
                 return true;
             end
@@ -59,7 +47,6 @@ if (not _G.Loaded) then
         local PlayerWeapon = Instance.new("TextLabel")
         local PlayerDistance = Instance.new("TextLabel")
         local UIStroke = Instance.new("UIStroke")
-
 
         BillboardGui.Parent = CoreGui;
         BillboardGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -81,7 +68,7 @@ if (not _G.Loaded) then
         UIStroke.Name = "UIStroke"
         UIStroke.Parent = Box;
         UIStroke.Thickness = 1;
-        UIStroke.Color = Color3.fromRGB(0,255,0);
+        UIStroke.Color = Color3.fromRGB(0, 255, 0);
         UIStroke.LineJoinMode = Enum.LineJoinMode.Miter;
 
         PlayerName.Name = "PlayerName"
@@ -99,7 +86,6 @@ if (not _G.Loaded) then
         PlayerName.TextSize = 12.000
         PlayerName.TextYAlignment = Enum.TextYAlignment.Bottom
 
-
         PlayerWeapon.Name = "PlayerWeapon"
         PlayerWeapon.Parent = BillboardGui
         PlayerWeapon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -115,7 +101,6 @@ if (not _G.Loaded) then
         PlayerWeapon.TextXAlignment = Enum.TextXAlignment.Left
         PlayerWeapon.TextYAlignment = Enum.TextYAlignment.Bottom
         PlayerWeapon.Visible = false;
-
 
         PlayerDistance.Name = "PlayerDistance"
         PlayerDistance.Parent = BillboardGui
@@ -141,35 +126,36 @@ if (not _G.Loaded) then
     end
 
     function IsPlayer(Model)
-        return Model.ClassName == "Model" and Model:FindFirstChild("Head") and Model.PrimaryPart~=nil;
+        return Model.ClassName == "Model" and Model:FindFirstChild("Head") and Model.PrimaryPart ~= nil;
     end
 
-    function SetColor(Billboard,Color) 
+    function SetColor(Billboard, Color)
         Billboard.PlayerName.TextColor3 = Color;
         Billboard.PlayerDistance.TextColor3 = Color;
         Billboard.PlayerWeapon.TextColor3 = Color;
         Billboard.Box.UIStroke.Color = Color;
     end
 
-    function HitboxExpander(Model,Size,Hitbox)
-        if (Hitbox.Enabled) then
-            local Part = Model[Hitbox.Part];
-            Part.Size = Vector3.new(Size,Size,Size);
-            Part.Transparency = Hitbox.Transparency;
-            Part.CanCollide = false;
-        else
-            local Part = Model[Hitbox.Part];
-            Part.Size = OriginalSizes[Hitbox.Part];
-            Part.Transparency = 0;
-            Part.CanCollide = true;
-        end
+    function UpdateBox(value)
+        _G.Flags.ESP.Box = value;
+    end
+
+    function UpdateName(value)
+        _G.Flags.ESP.Name = value;
+    end
+
+    function UpdateWeapon(value)
+        _G.Flags.ESP.Weapon = value;
+    end
+
+    function UpdateDistance(value)
+        _G.Flags.ESP.Distance = value;
     end
 
     local HasESP = {};
     RunService.Heartbeat:Connect(function()
-        local ESP =  _G.Flags.ESP;
-        local Hitbox = _G.Flags.HitboxExpander;
-        for i,v in pairs(workspace:GetChildren()) do
+        local ESP = _G.Flags.ESP;
+        for i, v in pairs(workspace:GetChildren()) do
             if (HasESP[v] or IsPlayer(v)) then
                 if (HasESP[v] == nil) then
                     local Billboard = CreateESP();
@@ -179,9 +165,9 @@ if (not _G.Loaded) then
                     local Billboard = HasESP[v];
                     local PrimaryPosition = v.PrimaryPart.Position;
                     local Origin = CurrentCamera.CFrame.Position;
-                    local Distance = (Origin-PrimaryPosition).Magnitude;
-                    HitboxExpander(v,Hitbox.Size,Hitbox);
+                    local Distance = (Origin - PrimaryPosition).Magnitude;
                     local Sleeping = IsSleeping(v);
+
                     if ((Distance > ESP.DistanceLimit) or (not ESP.Sleepers and Sleeping)) then
                         Billboard.Enabled = false;
                         continue;
@@ -197,19 +183,25 @@ if (not _G.Loaded) then
 
                     Billboard.PlayerDistance.Text = "[" .. math.round(Distance) .. "]";
                     Billboard.PlayerWeapon.Text = PlayerWeapon(v);
-                    
+
                     if (v.Head.Nametag.tag.Text ~= "") then
                         Billboard.PlayerName.Text = v.Head.Nametag.tag.Text;
-                    end 
+                    end
                     local Params = RaycastParams.new();
-                    Params.FilterDescendantsInstances = {IgnoreFolder,v};
+                    Params.FilterDescendantsInstances = {IgnoreFolder, v};
                     local Direction = PrimaryPosition - Origin;
-                    local Raycast = workspace:Raycast(Origin,Direction,Params);
+                    local Raycast = workspace:Raycast(Origin, Direction, Params);
                     SetColor(Billboard, if (not Raycast or not ESP.VisibleCheck) then ESP.VisibleColor else ESP.NotVisibleColor);
-                end 
+                end
             end
         end
     end)
 end
+
+
+
+
+
+
 
 
