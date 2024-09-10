@@ -4,10 +4,10 @@ local function CreateBoxESP()
     function BoxESP.CreateBox(Player)
         local Box = Drawing.new("Square")
         Box.Visible = true
-        Box.Color = Color3.fromRGB(128, 0, 128)
+        Box.Color = Color3.fromRGB(255, 255, 255)
         Box.Filled = false
-        Box.Transparency = 0.50
-        Box.Thickness = 2
+        Box.Transparency = 1
+        Box.Thickness = 1
 
         local Updater
         local function UpdateBox()
