@@ -71,6 +71,7 @@ if (not _G.Loaded) then
         UIStroke.Color = Color3.fromRGB(0, 255, 0);
         UIStroke.LineJoinMode = Enum.LineJoinMode.Miter;
 
+        -- Добавляем черную обводку для текста
         PlayerName.Name = "PlayerName"
         PlayerName.Parent = BillboardGui
         PlayerName.AnchorPoint = Vector2.new(0.5, 1)
@@ -81,41 +82,47 @@ if (not _G.Loaded) then
         PlayerName.Position = UDim2.new(0.5, 0, 0.495499998, 0)
         PlayerName.Size = UDim2.new(0, 100, 0, 10)
         PlayerName.Font = Enum.Font.SourceSans
-        PlayerName.Text = "Player"
+        PlayerName.Text = "[-] Player" 
         PlayerName.TextColor3 = Color3.fromRGB(0, 255, 8)
         PlayerName.TextSize = 12.000
         PlayerName.TextYAlignment = Enum.TextYAlignment.Bottom
-
-        PlayerWeapon.Name = "PlayerWeapon"
-        PlayerWeapon.Parent = BillboardGui
-        PlayerWeapon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        PlayerWeapon.BackgroundTransparency = 1.010
-        PlayerWeapon.BorderColor3 = Color3.fromRGB(0, 0, 0)
-        PlayerWeapon.BorderSizePixel = 5
-        PlayerWeapon.Position = UDim2.new(0.504499972, 0, 0.495499998, 0)
-        PlayerWeapon.Size = UDim2.new(0, 100, 0, 10)
-        PlayerWeapon.Font = Enum.Font.SourceSans
-        PlayerWeapon.Text = "Weapon"
-        PlayerWeapon.TextColor3 = Color3.fromRGB(0, 255, 8)
-        PlayerWeapon.TextSize = 12.000
-        PlayerWeapon.TextXAlignment = Enum.TextXAlignment.Left
-        PlayerWeapon.TextYAlignment = Enum.TextYAlignment.Bottom
-        PlayerWeapon.Visible = false;
+        PlayerName.TextStrokeColor3 = Color3.fromRGB(0, 0, 0) 
+        PlayerName.TextStrokeTransparency = 0 
 
         PlayerDistance.Name = "PlayerDistance"
         PlayerDistance.Parent = BillboardGui
-        PlayerDistance.AnchorPoint = Vector2.new(0.5, 0)
         PlayerDistance.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         PlayerDistance.BackgroundTransparency = 1.010
         PlayerDistance.BorderColor3 = Color3.fromRGB(0, 0, 0)
         PlayerDistance.BorderSizePixel = 5
-        PlayerDistance.Position = UDim2.new(0.5, 0, 0.504999995, 5)
+        PlayerDistance.Position = UDim2.new(0.504499972, 0, 0.495499998, 0) 
         PlayerDistance.Size = UDim2.new(0, 100, 0, 10)
         PlayerDistance.Font = Enum.Font.SourceSans
         PlayerDistance.Text = "[500]"
         PlayerDistance.TextColor3 = Color3.fromRGB(0, 255, 8)
         PlayerDistance.TextSize = 12.000
+        PlayerDistance.TextXAlignment = Enum.TextXAlignment.Left
         PlayerDistance.TextYAlignment = Enum.TextYAlignment.Bottom
+        PlayerDistance.TextStrokeColor3 = Color3.fromRGB(0, 0, 0) 
+        PlayerDistance.TextStrokeTransparency = 0 
+
+        PlayerWeapon.Name = "PlayerWeapon"
+        PlayerWeapon.Parent = BillboardGui
+        PlayerWeapon.AnchorPoint = Vector2.new(0.5, 0)
+        PlayerWeapon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        PlayerWeapon.BackgroundTransparency = 1.010
+        PlayerWeapon.BorderColor3 = Color3.fromRGB(0, 0, 0)
+        PlayerWeapon.BorderSizePixel = 5
+        PlayerWeapon.Position = UDim2.new(0.5, 0, 0.504999995, 5) 
+        PlayerWeapon.Size = UDim2.new(0, 100, 0, 10)
+        PlayerWeapon.Font = Enum.Font.SourceSans
+        PlayerWeapon.Text = "Weapon"
+        PlayerWeapon.TextColor3 = Color3.fromRGB(0, 255, 8)
+        PlayerWeapon.TextSize = 12.000
+        PlayerWeapon.TextYAlignment = Enum.TextYAlignment.Bottom
+        PlayerWeapon.TextStrokeColor3 = Color3.fromRGB(0, 0, 0) 
+        PlayerWeapon.TextStrokeTransparency = 0 
+        PlayerWeapon.Visible = false;
 
         return BillboardGui;
     end
@@ -185,7 +192,7 @@ if (not _G.Loaded) then
                     Billboard.PlayerWeapon.Text = PlayerWeapon(v);
 
                     if (v.Head.Nametag.tag.Text ~= "") then
-                        Billboard.PlayerName.Text = v.Head.Nametag.tag.Text;
+                        Billboard.PlayerName.Text = "[-] " .. v.Head.Nametag.tag.Text; 
                     end
                     local Params = RaycastParams.new();
                     Params.FilterDescendantsInstances = {IgnoreFolder, v};
@@ -197,11 +204,4 @@ if (not _G.Loaded) then
         end
     end)
 end
-
-
-
-
-
-
-
 
