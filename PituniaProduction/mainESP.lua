@@ -71,7 +71,6 @@ if (not _G.Loaded) then
         UIStroke.Color = Color3.fromRGB(0, 255, 0);
         UIStroke.LineJoinMode = Enum.LineJoinMode.Miter;
 
-        -- Добавляем черную обводку для текста
         PlayerName.Name = "PlayerName"
         PlayerName.Parent = BillboardGui
         PlayerName.AnchorPoint = Vector2.new(0.5, 1)
