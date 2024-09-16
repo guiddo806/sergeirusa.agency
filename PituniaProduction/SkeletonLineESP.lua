@@ -31,7 +31,6 @@ local function CreateSkeletonLinesESP()
                 local Camera = workspace.CurrentCamera
 
                 local parts = {
-                    Head = Player:FindFirstChild("Head"),
                     Torso = Player:FindFirstChild("UpperTorso") or Player:FindFirstChild("Torso"),
                     LeftArm = Player:FindFirstChild("LeftUpperArm"),
                     RightArm = Player:FindFirstChild("RightUpperArm"),
@@ -48,7 +47,6 @@ local function CreateSkeletonLinesESP()
                 }
 
                 local skeleton_connections = {
-                    {parts.Head, parts.Torso},
                     {parts.Torso, parts.LeftArm},
                     {parts.Torso, parts.RightArm},
                     {parts.Torso, parts.LeftLeg},
@@ -76,20 +74,9 @@ local function CreateSkeletonLinesESP()
                     end
                 end
 
-                
-                if parts.Head then
-                    local headPos, headVisible = Camera:WorldToViewportPoint(parts.Head.Position)
-                    HeadCircle.Visible = headVisible
-                    HeadCircle.Position = Vector2.new(headPos.X, headPos.Y)
-                    HeadCircle.Radius = math.max(5, 15 / headPos.Z) 
-                else
-                    HeadCircle.Visible = false
-                end
-
-            
                 if parts.Head and Player:FindFirstChild("HumanoidRootPart") then
                     local headPos, headVisible = Camera:WorldToViewportPoint(parts.Head.Position)
-                    local rootPartPos, rootPartVisible = Camera:WorldToViewportPoint(Player.HumanoidRootPart.Position + Player.HumanoidRootPart.CFrame.LookVector * 5)  -- Добавляем LookVector для направления
+                    local rootPartPos, rootPartVisible = Camera:WorldToViewportPoint(Player.HumanoidRootPart.Position + Player.HumanoidRootPart.CFrame.LookVector * 5)  
                     ViewDirectionLine.Visible = headVisible and rootPartVisible
                     ViewDirectionLine.From = Vector2.new(headPos.X, headPos.Y)
                     ViewDirectionLine.To = Vector2.new(rootPartPos.X, rootPartPos.Y)
@@ -100,13 +87,11 @@ local function CreateSkeletonLinesESP()
                 for _, line in ipairs(Lines) do
                     line.Visible = false
                 end
-                HeadCircle.Visible = false
                 ViewDirectionLine.Visible = false
                 if not Player then
                     for _, line in ipairs(Lines) do
                         line:Remove()
                     end
-                    HeadCircle:Remove()
                     ViewDirectionLine:Remove()
                     Updater:Disconnect()
                 end
