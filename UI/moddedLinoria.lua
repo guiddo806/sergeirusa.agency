@@ -32,7 +32,7 @@ local Library = {
     FontColor = Color3.fromRGB(255, 255, 255);
     MainColor = Color3.fromRGB(28, 28, 28);
     BackgroundColor = Color3.fromRGB(20, 20, 20);
-    AccentColor = Color3.fromRGB(240, 230, 140); -- Акцентный цвет
+    AccentColor = Color3.fromRGB(240, 230, 140); 
     OutlineColor = Color3.fromRGB(50, 50, 50);
     RiskColor = Color3.fromRGB(255, 50, 50);
 
@@ -65,48 +65,6 @@ table.insert(Library.Signals, RenderStepped:Connect(function(Delta)
         Library.CurrentRainbowColor = Color3.fromHSV(Hue, 0.8, 1);
     end
 end))
-
--- Функция для создания неонового свечения на основе AccentColor
-local function ApplyAccentGlowToElement(element)
-    if element:IsA("GuiObject") then
-        local stroke = Instance.new("UIStroke")
-        stroke.Thickness = 2
-        stroke.Color = Library.AccentColor
-        stroke.Transparency = 0.5
-        stroke.Parent = element
-
-        -- Создаем анимацию пульсации для свечения
-        local glowTweenInfo = TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
-        local tweenGoal = { Transparency = 0.2, Thickness = 4 }
-
-        local glowTween = TweenService:Create(stroke, glowTweenInfo, tweenGoal)
-        glowTween:Play()
-
-        return stroke
-    end
-end
-
--- Применяем неоновое свечение ко всем элементам, которые зарегистрированы в Library.Registry
-local function ApplyGlowToAllRegistry()
-    for _, element in pairs(Library.Registry) do
-        ApplyAccentGlowToElement(element.Instance)
-    end
-end
-
--- Пример добавления элемента в Library.Registry и применения свечения
-local NewButton = Instance.new("TextButton")
-NewButton.Size = UDim2.new(0, 200, 0, 50)
-NewButton.Position = UDim2.new(0.5, -100, 0.5, -25)
-NewButton.BackgroundColor3 = Library.MainColor
-NewButton.TextColor3 = Library.FontColor
-NewButton.Text = "Button"
-NewButton.Parent = ScreenGui
-
--- Добавляем кнопку в реестр Library
-table.insert(Library.Registry, { Instance = NewButton })
-
--- Применяем свечение ко всем элементам в реестре
-ApplyGlowToAllRegistry()
 
 local function GetPlayersString()
     local PlayerList = Players:GetPlayers();
