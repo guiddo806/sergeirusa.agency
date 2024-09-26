@@ -1,2 +1,0 @@
-# sergeirusa.agency
-scripts
