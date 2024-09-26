@@ -32,7 +32,7 @@ local Library = {
     FontColor = Color3.fromRGB(255, 255, 255);
     MainColor = Color3.fromRGB(28, 28, 28);
     BackgroundColor = Color3.fromRGB(20, 20, 20);
-    AccentColor = Color3.fromRGB(240, 230, 140); 
+    AccentColor = Color3.fromRGB(240, 230, 140); -- Акцентный цвет
     OutlineColor = Color3.fromRGB(50, 50, 50);
     RiskColor = Color3.fromRGB(255, 50, 50);
 
@@ -66,29 +66,47 @@ table.insert(Library.Signals, RenderStepped:Connect(function(Delta)
     end
 end))
 
-local function CreateNeonGlow(element)
-    local stroke = Instance.new("UIStroke")  
-    stroke.Thickness = 2  
-    stroke.Color = Library.AccentColor  
-    stroke.Transparency = 0.5  
-    stroke.Parent = element  
+-- Функция для создания неонового свечения на основе AccentColor
+local function ApplyAccentGlowToElement(element)
+    if element:IsA("GuiObject") then
+        local stroke = Instance.new("UIStroke")
+        stroke.Thickness = 2
+        stroke.Color = Library.AccentColor
+        stroke.Transparency = 0.5
+        stroke.Parent = element
 
-    -- Анимация пульсации свечения
-    local glowTweenInfo = TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true) 
-    local tweenGoal = { Transparency = 0.2, Thickness = 4 }  
+        -- Создаем анимацию пульсации для свечения
+        local glowTweenInfo = TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
+        local tweenGoal = { Transparency = 0.2, Thickness = 4 }
 
-    local glowTween = TweenService:Create(stroke, glowTweenInfo, tweenGoal)
-    glowTween:Play()
+        local glowTween = TweenService:Create(stroke, glowTweenInfo, tweenGoal)
+        glowTween:Play()
 
-    return stroke  
+        return stroke
+    end
 end
 
-local Frame = Instance.new("Frame")
-Frame.Size = UDim2.new(0, 200, 0, 100) 
-Frame.Position = UDim2.new(0.5, -100, 0.5, -50)  
-Frame.BackgroundColor3 = Library.BackgroundColor  
-Frame.Parent = ScreenGui  
-CreateNeonGlow(Frame)
+-- Применяем неоновое свечение ко всем элементам, которые зарегистрированы в Library.Registry
+local function ApplyGlowToAllRegistry()
+    for _, element in pairs(Library.Registry) do
+        ApplyAccentGlowToElement(element.Instance)
+    end
+end
+
+-- Пример добавления элемента в Library.Registry и применения свечения
+local NewButton = Instance.new("TextButton")
+NewButton.Size = UDim2.new(0, 200, 0, 50)
+NewButton.Position = UDim2.new(0.5, -100, 0.5, -25)
+NewButton.BackgroundColor3 = Library.MainColor
+NewButton.TextColor3 = Library.FontColor
+NewButton.Text = "Button"
+NewButton.Parent = ScreenGui
+
+-- Добавляем кнопку в реестр Library
+table.insert(Library.Registry, { Instance = NewButton })
+
+-- Применяем свечение ко всем элементам в реестре
+ApplyGlowToAllRegistry()
 
 local function GetPlayersString()
     local PlayerList = Players:GetPlayers();
