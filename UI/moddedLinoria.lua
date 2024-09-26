@@ -3,7 +3,7 @@ local TextService = game:GetService('TextService');
 local CoreGui = game:GetService('CoreGui');
 local Teams = game:GetService('Teams');
 local Players = game:GetService('Players');
-local RunService = game:GetService('RunService')
+local RunService = game:GetService('RunService');
 local TweenService = game:GetService('TweenService');
 local RenderStepped = RunService.RenderStepped;
 local LocalPlayer = Players.LocalPlayer;
@@ -32,12 +32,12 @@ local Library = {
     FontColor = Color3.fromRGB(255, 255, 255);
     MainColor = Color3.fromRGB(28, 28, 28);
     BackgroundColor = Color3.fromRGB(20, 20, 20);
-    AccentColor = Color3.fromRGB(0, 85, 255);
+    AccentColor = Color3.fromRGB(240, 230, 140); 
     OutlineColor = Color3.fromRGB(50, 50, 50);
-    RiskColor = Color3.fromRGB(255, 50, 50),
+    RiskColor = Color3.fromRGB(255, 50, 50);
 
     Black = Color3.new(0, 0, 0);
-    Font = Enum.Font.Code,
+    Font = Enum.Font.Code;
 
     OpenedFrames = {};
     DependencyBoxes = {};
@@ -65,6 +65,30 @@ table.insert(Library.Signals, RenderStepped:Connect(function(Delta)
         Library.CurrentRainbowColor = Color3.fromHSV(Hue, 0.8, 1);
     end
 end))
+
+local function CreateNeonGlow(element)
+    local stroke = Instance.new("UIStroke")  
+    stroke.Thickness = 2  
+    stroke.Color = Library.AccentColor  
+    stroke.Transparency = 0.5  
+    stroke.Parent = element  
+
+    -- Анимация пульсации свечения
+    local glowTweenInfo = TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true) 
+    local tweenGoal = { Transparency = 0.2, Thickness = 4 }  
+
+    local glowTween = TweenService:Create(stroke, glowTweenInfo, tweenGoal)
+    glowTween:Play()
+
+    return stroke  
+end
+
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, 200, 0, 100) 
+Frame.Position = UDim2.new(0.5, -100, 0.5, -50)  
+Frame.BackgroundColor3 = Library.BackgroundColor  
+Frame.Parent = ScreenGui  
+CreateNeonGlow(Frame)
 
 local function GetPlayersString()
     local PlayerList = Players:GetPlayers();
