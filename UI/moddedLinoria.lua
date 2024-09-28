@@ -46,59 +46,8 @@ local Library = {
     ScreenGui = ScreenGui;
 };
 
-function Library:ApplyGradient(Instance, Color1, Color2)
-    local Gradient = Instance.new("UIGradient")
-    Gradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color1), -- Начало градиента
-        ColorSequenceKeypoint.new(1, Color2)  -- Конец градиента
-    }
-    Gradient.Parent = Instance
-end
-
--- Функция создания TextLabel с градиентом
-function Library:CreateLabel(Properties, IsHud)
-    local _Instance = Library:Create('TextLabel', {
-        BackgroundTransparency = 1;
-        Font = Library.Font;
-        TextColor3 = Library.FontColor;
-        TextSize = 16;
-        TextStrokeTransparency = 0;
-    });
-
-    Library:ApplyTextStroke(_Instance);
-
-    -- Применение градиента к тексту
-    Library:ApplyGradient(_Instance, Color3.fromRGB(255, 0, 0), Color3.fromRGB(0, 0, 255))  -- Красный -> Синий
-
-    Library:AddToRegistry(_Instance, {
-        TextColor3 = 'FontColor';
-    }, IsHud);
-
-    return Library:Create(_Instance, Properties);
-end;
-
--- Функция создания любого UI объекта с градиентом
-function Library:Create(Class, Properties)
-    local _Instance = Class;
-
-    if type(Class) == 'string' then
-        _Instance = Instance.new(Class);
-    end;
-
-    for Property, Value in next, Properties do
-        _Instance[Property] = Value;
-    end;
-
-    -- Применение градиента для любого объекта
-    if _Instance:IsA("GuiObject") then
-        Library:ApplyGradient(_Instance, Color3.fromRGB(255, 0, 0), Color3.fromRGB(0, 255, 0))  -- Красный -> Зеленый
-    end
-
-    return _Instance;
-end;
-
 local RainbowStep = 0
-local Hue = 0
+local Hue = 1
 
 table.insert(Library.Signals, RenderStepped:Connect(function(Delta)
     RainbowStep = RainbowStep + Delta
