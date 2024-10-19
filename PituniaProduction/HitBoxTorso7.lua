@@ -3,8 +3,8 @@ if (not _G.Flags) then
 		HitboxExpander = {
 			Size = 7;
 			Enabled = true;
-			Transparency = .7; -- 1 = invisible, 0 = fully visible (0 not recommended)
-			Part = "Torso"; -- {"Torso","Head","rest of the body parts"}
+			Transparency = .7; 
+			Part = "Torso"; 
 		};
 	};
 end
