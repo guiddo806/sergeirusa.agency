@@ -1,7 +1,7 @@
 if (not _G.Flags) then
 	_G.Flags = {
 		HitboxExpander = {
-			Size = 7;
+			Size = 10;
 			Enabled = true;
 			Transparency = .7; 
 			Part = "Torso"; 
