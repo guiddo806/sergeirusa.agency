@@ -24,9 +24,39 @@ local Tabs = {
 local HitboxSection = Tabs.Combat:AddLeftGroupbox('Hitboxes')
 local ESPSection = Tabs.Visuals:AddLeftGroupbox('Players')
 
+if (not _G.Flags) then
+    _G.Flags = {
+        HitboxExpander = {
+            Size = 10;
+            Enabled = false;
+            Transparency = .7; 
+            Part = "Torso"; 
+        };
+    };
+end
+
 local espEnabled = false 
 local showDistance = false 
 local currentESPDistance = 1500 
+
+HitboxSection:AddToggle('EnableHitboxExpander', {
+    Text = 'Enable Hitbox',
+    Default = _G.Flags.HitboxExpander.Enabled,
+    Tooltip = 'Toggle hitbox',
+}):OnChanged(function(state)
+    _G.Flags.HitboxExpander.Enabled = state
+end)
+
+HitboxSection:AddSlider('HitboxSize', {
+    Text = 'Size',
+    Default = _G.Flags.HitboxExpander.Size,
+    Min = 1,
+    Max = 15,
+    Rounding = 1,
+    Tooltip = 'Adjust hitbox size',
+}):OnChanged(function(value)
+    _G.Flags.HitboxExpander.Size = value
+end)
 
 ESPSection:AddToggle('EnableBoxESP', {
     Text = 'CornerBox',
@@ -191,6 +221,43 @@ Workspace.ChildAdded:Connect(function(Player)
 end)
 
 EnableBoxESP()
+
+if (not _G.Loaded) then
+    _G.Loaded = true;
+    local OriginalSizes = {}
+
+    for i, v in pairs(game:GetService("ReplicatedStorage").Shared.entities.Player.Model:GetChildren()) do
+        if v:IsA("BasePart") then
+            OriginalSizes[v.Name] = v.Size;
+        end
+    end
+
+    function IsPlayer(Model)
+        return Model.ClassName == "Model" and Model:FindFirstChild("Head") and Model.PrimaryPart ~= nil;
+    end
+
+    function HitboxExpander(Model, Size, Hitbox)
+        local Part = Model[Hitbox.Part]
+        if (Hitbox.Enabled) then
+            Part.Size = Vector3.new(Size, Size, Size) 
+            Part.Transparency = Hitbox.Transparency
+            Part.CanCollide = false
+        else
+            Part.Size = OriginalSizes[Hitbox.Part]
+            Part.Transparency = 0
+            Part.CanCollide = true
+        end
+    end
+
+    RunService.Heartbeat:Connect(function()
+        local Hitbox = _G.Flags.HitboxExpander
+        for i, v in pairs(workspace:GetChildren()) do
+            if IsPlayer(v) then
+                HitboxExpander(v, Hitbox.Size, Hitbox)
+            end
+        end
+    end)
+end
 
 Library:SetWatermarkVisibility(true)
 
