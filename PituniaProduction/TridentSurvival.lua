@@ -27,7 +27,7 @@ local showDistance = false
 local currentESPDistance = 1500 
 
 ESPSection:AddToggle('EnableBoxESP', {
-    Text = 'Box',
+    Text = 'CornerBox',
     Default = espEnabled,
     Tooltip = 'Toggle the Box ESP',
 }):OnChanged(function(state)
@@ -37,7 +37,7 @@ end)
 ESPSection:AddToggle('ShowDistance', {
     Text = 'Distance',
     Default = showDistance,
-    Tooltip = 'Toggle the distance display above the box',
+    Tooltip = 'Toggle the Distance ESP',
 }):OnChanged(function(state)
     showDistance = state
 end)
@@ -56,12 +56,25 @@ end)
 local distanceOffset = Vector2.new(0, -13)
 
 local function CreateBox(Player)
-    local Box = Drawing.new("Square")
-    Box.Visible = false 
-    Box.Color = Color3.fromRGB(255, 255, 255)
-    Box.Filled = false
-    Box.Transparency = 1
-    Box.Thickness = 1
+    local TopLeftLineH = Drawing.new("Line")
+    local TopLeftLineV = Drawing.new("Line")
+    
+    local TopRightLineH = Drawing.new("Line")
+    local TopRightLineV = Drawing.new("Line")
+    
+    local BottomLeftLineH = Drawing.new("Line")
+    local BottomLeftLineV = Drawing.new("Line")
+    
+    local BottomRightLineH = Drawing.new("Line")
+    local BottomRightLineV = Drawing.new("Line")
+
+    local lines = {TopLeftLineH, TopLeftLineV, TopRightLineH, TopRightLineV, BottomLeftLineH, BottomLeftLineV, BottomRightLineH, BottomRightLineV}
+    for _, line in pairs(lines) do
+        line.Visible = false
+        line.Color = Color3.fromRGB(255, 255, 255)
+        line.Thickness = 1
+        line.Transparency = 1
+    end
 
     local DistanceText = Drawing.new("Text")
     DistanceText.Visible = false 
@@ -80,37 +93,77 @@ local function CreateBox(Player)
             local Target2dPosition, IsVisible = Camera:WorldToViewportPoint(HumanoidRootPart.Position)
 
             if not IsVisible then
-                Box.Visible = false
+                for _, line in pairs(lines) do
+                    line.Visible = false
+                end
                 DistanceText.Visible = false
                 return
             end
 
             local Distance = (Camera.CFrame.p - HumanoidRootPart.Position).Magnitude
             if Distance > currentESPDistance then
-                Box.Visible = false
+                for _, line in pairs(lines) do
+                    line.Visible = false
+                end
                 DistanceText.Visible = false
                 return
             end
 
             local scale_factor = 1 / (Target2dPosition.Z * math.tan(math.rad(Camera.FieldOfView * 0.5)) * 2) * 100
             local width, height = math.floor(18 * scale_factor * 3), math.floor(28 * scale_factor * 3)
+            local x = Target2dPosition.X - width / 2
+            local y = Target2dPosition.Y - height / 2
 
-            Box.Visible = espEnabled and IsVisible
-            Box.Size = Vector2.new(width, height)
-            Box.Position = Vector2.new(Target2dPosition.X - Box.Size.X / 2, Target2dPosition.Y - Box.Size.Y / 2)
+            local cornerLength = math.min(width, height) * 0.3
+
+            TopLeftLineH.Visible = espEnabled and IsVisible
+            TopLeftLineH.From = Vector2.new(x, y)
+            TopLeftLineH.To = Vector2.new(x + cornerLength, y)
+
+            TopLeftLineV.Visible = espEnabled and IsVisible
+            TopLeftLineV.From = Vector2.new(x, y)
+            TopLeftLineV.To = Vector2.new(x, y + cornerLength)
+
+            TopRightLineH.Visible = espEnabled and IsVisible
+            TopRightLineH.From = Vector2.new(x + width, y)
+            TopRightLineH.To = Vector2.new(x + width - cornerLength, y)
+
+            TopRightLineV.Visible = espEnabled and IsVisible
+            TopRightLineV.From = Vector2.new(x + width, y)
+            TopRightLineV.To = Vector2.new(x + width, y + cornerLength)
+
+            BottomLeftLineH.Visible = espEnabled and IsVisible
+            BottomLeftLineH.From = Vector2.new(x, y + height)
+            BottomLeftLineH.To = Vector2.new(x + cornerLength, y + height)
+
+            BottomLeftLineV.Visible = espEnabled and IsVisible
+            BottomLeftLineV.From = Vector2.new(x, y + height)
+            BottomLeftLineV.To = Vector2.new(x, y + height - cornerLength)
+
+            BottomRightLineH.Visible = espEnabled and IsVisible
+            BottomRightLineH.From = Vector2.new(x + width, y + height)
+            BottomRightLineH.To = Vector2.new(x + width - cornerLength, y + height)
+
+            BottomRightLineV.Visible = espEnabled and IsVisible
+            BottomRightLineV.From = Vector2.new(x + width, y + height)
+            BottomRightLineV.To = Vector2.new(x + width, y + height - cornerLength)
 
             if showDistance and espEnabled then
-                DistanceText.Text = string.format("%ds", math.floor(Distance)) 
+                DistanceText.Text = string.format("%ds", math.floor(Distance))
                 DistanceText.Visible = IsVisible
-                DistanceText.Position = Box.Position + Vector2.new(Box.Size.X / 2, distanceOffset.Y)  
+                DistanceText.Position = Vector2.new(x + width / 2, y - 13)  
             else
                 DistanceText.Visible = false
             end
         else
-            Box.Visible = false
+            for _, line in pairs(lines) do
+                line.Visible = false
+            end
             DistanceText.Visible = false
             if not Player then
-                Box:Remove()
+                for _, line in pairs(lines) do
+                    line:Remove()
+                end
                 DistanceText:Remove()
                 Updater:Disconnect()
             end
@@ -118,7 +171,7 @@ local function CreateBox(Player)
     end
 
     Updater = RunService.RenderStepped:Connect(UpdateBox)
-    return Box
+    return {lines = lines, DistanceText = DistanceText}
 end
 
 local function EnableBoxESP()
@@ -152,7 +205,7 @@ local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(
         FrameCounter = 0;
     end;
 
-    Library:SetWatermark(('feafelact  -  trident survival  | %s fps | %s ms'):format(
+    Library:SetWatermark(('feafelact | trident survival | build: prob | %s fps | %s ms'):format(
         math.floor(FPS),
         math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue())
     ));
