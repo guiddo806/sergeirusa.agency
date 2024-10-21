@@ -17,9 +17,11 @@ local Window = Library:CreateWindow({
 local Tabs = {
     Combat = Window:AddTab('Combat'),
     Visuals = Window:AddTab('Visuals'),
+    Misc = Window:AddTab('Misc'),
     ['UI Settings'] = Window:AddTab('UI Settings'),
 }
 
+local HitboxSection = Tabs.Combat:AddLeftGroupbox('Hitboxes')
 local ESPSection = Tabs.Visuals:AddLeftGroupbox('Players')
 
 local espEnabled = false 
