@@ -8,7 +8,7 @@ local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/addons/SaveManager.lua"))()
 
 local Window = Library:CreateWindow({
-    Title = 'feofelact',
+    Title = 'feofelact - Trident Survival V4',
     Center = true, 
     AutoShow = true,
     TabPadding = 6,
@@ -259,30 +259,7 @@ if (not _G.Loaded) then
     end)
 end
 
-Library:SetWatermarkVisibility(true)
-
-local FrameTimer = tick()
-local FrameCounter = 0;
-local FPS = 60;
-
-local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(function()
-    FrameCounter += 1;
-
-    if (tick() - FrameTimer) >= 1 then
-        FPS = FrameCounter;
-        FrameTimer = tick();
-        FrameCounter = 0;
-    end;
-
-    Library:SetWatermark(('feafelact | trident survival | build: prob | %s fps | %s ms'):format(
-        math.floor(FPS),
-        math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue())
-    ));
-end);
-
 Library:OnUnload(function()
-    WatermarkConnection:Disconnect()
-
     print('Unloaded!')
     Library.Unloaded = true
 end)
