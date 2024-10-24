@@ -1,4 +1,4 @@
-local SelectPart = "Torso"
+local SelectPart = "Head"
 local HBSizeX = 8
 local HBSizeY = 8
 local HBSizeZ = 8
