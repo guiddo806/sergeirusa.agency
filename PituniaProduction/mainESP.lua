@@ -94,7 +94,7 @@ if (not _G.Loaded) then
         PlayerDistance.BackgroundTransparency = 1.010
         PlayerDistance.BorderColor3 = Color3.fromRGB(0, 0, 0)
         PlayerDistance.BorderSizePixel = 5
-        PlayerDistance.Position = UDim2.new(0.504499972, 0, 0.495499998, 0) 
+        PlayerDistance.Position = UDim2.new(0.504499980, 0, 0.495499998, 0) 
         PlayerDistance.Size = UDim2.new(0, 100, 0, 10)
         PlayerDistance.Font = Enum.Font.SourceSans
         PlayerDistance.Text = "500s"
