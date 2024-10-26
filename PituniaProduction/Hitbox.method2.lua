@@ -1,7 +1,7 @@
 local SelectPart = "Head"
-local HBSizeX = 8
-local HBSizeY = 8
-local HBSizeZ = 8
+local HBSizeX = 7
+local HBSizeY = 7
+local HBSizeZ = 7
 local SelectedColor = BrickColor.new("White")
 local hitboxlist = {}
 
