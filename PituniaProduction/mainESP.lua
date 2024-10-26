@@ -9,7 +9,7 @@ if (not _G.Flags) then
             Weapon = true;
             Distance = true;
             VisibleCheck = false;
-            Sleepers = false;
+            Sleepers = true;
         };
     };
 end
