@@ -1,14 +1,14 @@
 if (not _G.Flags) then
     _G.Flags = {
         ESP = {
-            NotVisibleColor = Color3.fromRGB(255, 255, 255);
-            VisibleColor = Color3.fromRGB(255, 255, 255);
+            NotVisibleColor = Color3.fromRGB(189,183,107);
+            VisibleColor = Color3.fromRGB(70,130,180);
             DistanceLimit = 2000;
             Box = true;
             Name = true;
             Weapon = true;
             Distance = true;
-            VisibleCheck = false;
+            VisibleCheck = true;
             Sleepers = true;
         };
     };
@@ -97,7 +97,7 @@ if (not _G.Loaded) then
         PlayerDistance.Position = UDim2.new(0.504499972, 0, 0.495499998, 0) 
         PlayerDistance.Size = UDim2.new(0, 100, 0, 10)
         PlayerDistance.Font = Enum.Font.SourceSans
-        PlayerDistance.Text = "500"
+        PlayerDistance.Text = "500s"
         PlayerDistance.TextColor3 = Color3.fromRGB(0, 255, 8)
         PlayerDistance.TextSize = 11
         PlayerDistance.TextXAlignment = Enum.TextXAlignment.Left
@@ -187,7 +187,7 @@ if (not _G.Loaded) then
                     Billboard.PlayerName.Visible = ESP.Name;
                     Billboard.PlayerWeapon.Visible = ESP.Weapon;
 
-                    Billboard.PlayerDistance.Text = "" .. math.round(Distance) .. "";
+                    Billboard.PlayerDistance.Text = "" .. math.round(Distance) .. "s";
                     Billboard.PlayerWeapon.Text = PlayerWeapon(v);
 
                     if (v.Head.Nametag.tag.Text ~= "") then
