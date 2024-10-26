@@ -81,9 +81,9 @@ if (not _G.Loaded) then
         PlayerName.Position = UDim2.new(0.5, 0, 0.495499998, 0)
         PlayerName.Size = UDim2.new(0, 100, 0, 10)
         PlayerName.Font = Enum.Font.SourceSans
-        PlayerName.Text = "[-] Player" 
+        PlayerName.Text = "Player" 
         PlayerName.TextColor3 = Color3.fromRGB(0, 255, 8)
-        PlayerName.TextSize = 12.000
+        PlayerName.TextSize = 11
         PlayerName.TextYAlignment = Enum.TextYAlignment.Bottom
         PlayerName.TextStrokeColor3 = Color3.fromRGB(0, 0, 0) 
         PlayerName.TextStrokeTransparency = 0 
@@ -99,7 +99,7 @@ if (not _G.Loaded) then
         PlayerDistance.Font = Enum.Font.SourceSans
         PlayerDistance.Text = "500"
         PlayerDistance.TextColor3 = Color3.fromRGB(0, 255, 8)
-        PlayerDistance.TextSize = 12.000
+        PlayerDistance.TextSize = 11
         PlayerDistance.TextXAlignment = Enum.TextXAlignment.Left
         PlayerDistance.TextYAlignment = Enum.TextYAlignment.Bottom
         PlayerDistance.TextStrokeColor3 = Color3.fromRGB(0, 0, 0) 
@@ -117,7 +117,7 @@ if (not _G.Loaded) then
         PlayerWeapon.Font = Enum.Font.SourceSans
         PlayerWeapon.Text = "Weapon"
         PlayerWeapon.TextColor3 = Color3.fromRGB(0, 255, 8)
-        PlayerWeapon.TextSize = 12.000
+        PlayerWeapon.TextSize = 11
         PlayerWeapon.TextYAlignment = Enum.TextYAlignment.Bottom
         PlayerWeapon.TextStrokeColor3 = Color3.fromRGB(0, 0, 0) 
         PlayerWeapon.TextStrokeTransparency = 0 
