@@ -3,7 +3,7 @@ if (not _G.Flags) then
         ESP = {
             NotVisibleColor = Color3.fromRGB(255, 255, 255);
             VisibleColor = Color3.fromRGB(255, 255, 255);
-            DistanceLimit = 3000;
+            DistanceLimit = 2000;
             Box = true;
             Name = true;
             Weapon = true;
@@ -97,7 +97,7 @@ if (not _G.Loaded) then
         PlayerDistance.Position = UDim2.new(0.504499972, 0, 0.495499998, 0) 
         PlayerDistance.Size = UDim2.new(0, 100, 0, 10)
         PlayerDistance.Font = Enum.Font.SourceSans
-        PlayerDistance.Text = "[500]"
+        PlayerDistance.Text = "500"
         PlayerDistance.TextColor3 = Color3.fromRGB(0, 255, 8)
         PlayerDistance.TextSize = 12.000
         PlayerDistance.TextXAlignment = Enum.TextXAlignment.Left
@@ -187,11 +187,11 @@ if (not _G.Loaded) then
                     Billboard.PlayerName.Visible = ESP.Name;
                     Billboard.PlayerWeapon.Visible = ESP.Weapon;
 
-                    Billboard.PlayerDistance.Text = "[" .. math.round(Distance) .. "]";
+                    Billboard.PlayerDistance.Text = "" .. math.round(Distance) .. "";
                     Billboard.PlayerWeapon.Text = PlayerWeapon(v);
 
                     if (v.Head.Nametag.tag.Text ~= "") then
-                        Billboard.PlayerName.Text = "[-] " .. v.Head.Nametag.tag.Text; 
+                        Billboard.PlayerName.Text = "" .. v.Head.Nametag.tag.Text; 
                     end
                     local Params = RaycastParams.new();
                     Params.FilterDescendantsInstances = {IgnoreFolder, v};
