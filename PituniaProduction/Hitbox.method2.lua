@@ -2,7 +2,7 @@ local SelectPart = "Head"
 local HBSizeX = 7
 local HBSizeY = 7
 local HBSizeZ = 7
-local SelectedColor = BrickColor.new("White")
+local SelectedColor = BrickColor.new("Dark Khaki")
 local hitboxlist = {}
 
 local function createHitbox(parent)
