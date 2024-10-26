@@ -4,7 +4,7 @@ if (not _G.Flags) then
 			Size = 10;
 			Enabled = true;
 			Transparency = .7; 
-			Part = "Torso"; 
+			Part = "Head"; 
 		};
 	};
 end
