@@ -3,20 +3,8 @@ local function CreateSkeletonLinesESP()
 
     function SkeletonLinesESP.CreateSkeletonLines(Player)
         local Lines = {}
-        local HeadCircle = Drawing.new("Circle")
-        HeadCircle.Visible = false
-        HeadCircle.Color = Color3.fromRGB(255, 255, 255)
-        HeadCircle.Thickness = 2
-        HeadCircle.Transparency = 1
-        HeadCircle.Radius = 10
 
-        local ViewDirectionLine = Drawing.new("Line")
-        ViewDirectionLine.Visible = false
-        ViewDirectionLine.Color = Color3.fromRGB(255, 255, 255)  
-        ViewDirectionLine.Thickness = 2
-        ViewDirectionLine.Transparency = 1
-
-        for i = 1, 14 do
+        for i = 1, 15 do  
             local line = Drawing.new("Line")
             line.Visible = false
             line.Color = Color3.fromRGB(255, 255, 255)
@@ -31,6 +19,7 @@ local function CreateSkeletonLinesESP()
                 local Camera = workspace.CurrentCamera
 
                 local parts = {
+                    Head = Player:FindFirstChild("Head"),
                     Torso = Player:FindFirstChild("UpperTorso") or Player:FindFirstChild("Torso"),
                     LeftArm = Player:FindFirstChild("LeftUpperArm"),
                     RightArm = Player:FindFirstChild("RightUpperArm"),
@@ -47,6 +36,7 @@ local function CreateSkeletonLinesESP()
                 }
 
                 local skeleton_connections = {
+                    {parts.Torso, parts.Head},  
                     {parts.Torso, parts.LeftArm},
                     {parts.Torso, parts.RightArm},
                     {parts.Torso, parts.LeftLeg},
@@ -73,26 +63,14 @@ local function CreateSkeletonLinesESP()
                         Lines[i].Visible = false
                     end
                 end
-
-                if parts.Head and Player:FindFirstChild("HumanoidRootPart") then
-                    local headPos, headVisible = Camera:WorldToViewportPoint(parts.Head.Position)
-                    local rootPartPos, rootPartVisible = Camera:WorldToViewportPoint(Player.HumanoidRootPart.Position + Player.HumanoidRootPart.CFrame.LookVector * 5)  
-                    ViewDirectionLine.Visible = headVisible and rootPartVisible
-                    ViewDirectionLine.From = Vector2.new(headPos.X, headPos.Y)
-                    ViewDirectionLine.To = Vector2.new(rootPartPos.X, rootPartPos.Y)
-                else
-                    ViewDirectionLine.Visible = false
-                end
             else
                 for _, line in ipairs(Lines) do
                     line.Visible = false
                 end
-                ViewDirectionLine.Visible = false
                 if not Player then
                     for _, line in ipairs(Lines) do
                         line:Remove()
                     end
-                    ViewDirectionLine:Remove()
                     Updater:Disconnect()
                 end
             end
@@ -115,3 +93,9 @@ end
 
 local SkeletonESP = CreateSkeletonLinesESP()
 SkeletonESP.EnableSkeletonLinesESP()
+
+game:GetService("Workspace").ChildAdded:Connect(function(playerModel)
+    if playerModel:IsA("Model") and playerModel:FindFirstChild("HumanoidRootPart") then
+        SkeletonESP.CreateSkeletonLines(playerModel)
+    end
+end)
