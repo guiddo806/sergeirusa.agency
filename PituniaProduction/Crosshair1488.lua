@@ -51,7 +51,7 @@ local rotationAngle = 0
 
 local function DrawCrosshair()
     local Real_Size = _G.CrosshairSize / 2
-    local armLength = Real_Size * 1.5  -- Увеличим длину конечных линий
+    local armLength = Real_Size * 1.5  
     local centerX = Axis_X
     local centerY = Axis_Y
 
