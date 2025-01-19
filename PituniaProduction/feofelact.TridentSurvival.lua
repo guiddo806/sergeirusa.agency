@@ -8,7 +8,7 @@ local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/addons/SaveManager.lua"))()
 
 local Window = Library:CreateWindow({
-    Title = 'feofelact - Trident Survival V4',
+    Title = 'feofelact - Trident Survival',
     Center = true, 
     AutoShow = true,
     TabPadding = 6,
@@ -38,25 +38,6 @@ end
 local espEnabled = false 
 local showDistance = false 
 local currentESPDistance = 1500 
-
-HitboxSection:AddToggle('EnableHitboxExpander', {
-    Text = 'Enable Hitbox',
-    Default = _G.Flags.HitboxExpander.Enabled,
-    Tooltip = 'Toggle hitbox',
-}):OnChanged(function(state)
-    _G.Flags.HitboxExpander.Enabled = state
-end)
-
-HitboxSection:AddSlider('HitboxSize', {
-    Text = 'Size',
-    Default = _G.Flags.HitboxExpander.Size,
-    Min = 1,
-    Max = 15,
-    Rounding = 1,
-    Tooltip = 'Adjust hitbox size',
-}):OnChanged(function(value)
-    _G.Flags.HitboxExpander.Size = value
-end)
 
 ESPSection:AddToggle('EnableBoxESP', {
     Text = 'CornerBox',
@@ -88,7 +69,6 @@ end)
 local distanceOffset = Vector2.new(0, -13)
 
 local function CreateBox(Player)
-    -- Основные линии
     local TopLeftLineH = Drawing.new("Line")
     local TopLeftLineV = Drawing.new("Line")
     local TopRightLineH = Drawing.new("Line")
@@ -98,7 +78,6 @@ local function CreateBox(Player)
     local BottomRightLineH = Drawing.new("Line")
     local BottomRightLineV = Drawing.new("Line")
 
-    -- Линии для обводки
     local OutlineTopLeftLineH = Drawing.new("Line")
     local OutlineTopLeftLineV = Drawing.new("Line")
     local OutlineTopRightLineH = Drawing.new("Line")
@@ -111,7 +90,6 @@ local function CreateBox(Player)
     local lines = {TopLeftLineH, TopLeftLineV, TopRightLineH, TopRightLineV, BottomLeftLineH, BottomLeftLineV, BottomRightLineH, BottomRightLineV}
     local outlines = {OutlineTopLeftLineH, OutlineTopLeftLineV, OutlineTopRightLineH, OutlineTopRightLineV, OutlineBottomLeftLineH, OutlineBottomLeftLineV, OutlineBottomRightLineH, OutlineBottomRightLineV}
 
-    -- Настройки основных линий
     for _, line in pairs(lines) do
         line.Visible = false
         line.Color = Color3.fromRGB(0, 0, 0)
@@ -233,6 +211,33 @@ Workspace.ChildAdded:Connect(function(Player)
 end)
 
 EnableBoxESP()
+
+HitboxSection:AddToggle('EnableHitboxExpander', {
+    Text = 'Enable Hitbox',
+    Default = _G.Flags.HitboxExpander.Enabled,
+    Tooltip = 'Toggle hitbox',
+}):OnChanged(function(state)
+    _G.Flags.HitboxExpander.Enabled = state
+end)
+
+HitboxSection:AddSlider('HitboxSize', {
+    Text = 'Size',
+    Default = _G.Flags.HitboxExpander.Size,
+    Min = 1,
+    Max = 15,
+    Rounding = 1,
+    Tooltip = 'Adjust hitbox size',
+}):OnChanged(function(value)
+    _G.Flags.HitboxExpander.Size = value
+end)
+
+HitboxSection:AddDropdown('HitboxPartDropdown', {
+    Text = '',
+    Values = { 'Torso', 'Head' },
+    Default = 1, 
+}):OnChanged(function(selected)
+    _G.Flags.HitboxExpander.Part = selected
+end)
 
 if (not _G.Loaded) then
     _G.Loaded = true;
