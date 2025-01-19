@@ -76,8 +76,8 @@ end)
 
 ESPSection:AddSlider('ESPDistance', {
     Text = 'Radius',
-    Min = 750,
-    Max = 2000,
+    Min = 100,
+    Max = 5000,
     Default = 1500,
     Rounding = 0,
     Tooltip = 'Adjust ESP display distance',
@@ -88,123 +88,135 @@ end)
 local distanceOffset = Vector2.new(0, -13)
 
 local function CreateBox(Player)
+    -- Основные линии
     local TopLeftLineH = Drawing.new("Line")
     local TopLeftLineV = Drawing.new("Line")
-    
     local TopRightLineH = Drawing.new("Line")
     local TopRightLineV = Drawing.new("Line")
-    
     local BottomLeftLineH = Drawing.new("Line")
     local BottomLeftLineV = Drawing.new("Line")
-    
     local BottomRightLineH = Drawing.new("Line")
     local BottomRightLineV = Drawing.new("Line")
 
+    -- Линии для обводки
+    local OutlineTopLeftLineH = Drawing.new("Line")
+    local OutlineTopLeftLineV = Drawing.new("Line")
+    local OutlineTopRightLineH = Drawing.new("Line")
+    local OutlineTopRightLineV = Drawing.new("Line")
+    local OutlineBottomLeftLineH = Drawing.new("Line")
+    local OutlineBottomLeftLineV = Drawing.new("Line")
+    local OutlineBottomRightLineH = Drawing.new("Line")
+    local OutlineBottomRightLineV = Drawing.new("Line")
+
     local lines = {TopLeftLineH, TopLeftLineV, TopRightLineH, TopRightLineV, BottomLeftLineH, BottomLeftLineV, BottomRightLineH, BottomRightLineV}
+    local outlines = {OutlineTopLeftLineH, OutlineTopLeftLineV, OutlineTopRightLineH, OutlineTopRightLineV, OutlineBottomLeftLineH, OutlineBottomLeftLineV, OutlineBottomRightLineH, OutlineBottomRightLineV}
+
+    -- Настройки основных линий
     for _, line in pairs(lines) do
         line.Visible = false
-        line.Color = Color3.fromRGB(255, 255, 255)
-        line.Thickness = 1
-        line.Transparency = 1
+        line.Color = Color3.fromRGB(0, 0, 0)
+        line.Thickness = 4
+    end
+
+    for _, outline in pairs(outlines) do
+        outline.Visible = false
+        outline.Color = Color3.fromRGB(255, 255, 255)
+        outline.Thickness = 2 
     end
 
     local DistanceText = Drawing.new("Text")
-    DistanceText.Visible = false 
-    DistanceText.Color = Color3.fromRGB(255, 255, 255) 
+    DistanceText.Visible = false
+    DistanceText.Color = Color3.fromRGB(255,99,71)
     DistanceText.Size = 12
     DistanceText.Center = true
     DistanceText.Outline = true
-    DistanceText.OutlineColor = Color3.fromRGB(0, 0, 0) 
-    DistanceText.Font = Drawing.Fonts.UI 
+    DistanceText.OutlineColor = Color3.fromRGB(0, 0, 0)
+    DistanceText.Font = Drawing.Fonts.UI
 
-    local Updater
     local function UpdateBox()
         local HumanoidRootPart = Player:FindFirstChild("HumanoidRootPart") or Player:FindFirstChild("UpperTorso")
         if HumanoidRootPart then
             local Camera = workspace.CurrentCamera
-            local Target2dPosition, IsVisible = Camera:WorldToViewportPoint(HumanoidRootPart.Position)
+            local ScreenPosition, IsVisible = Camera:WorldToViewportPoint(HumanoidRootPart.Position)
 
             if not IsVisible then
-                for _, line in pairs(lines) do
-                    line.Visible = false
-                end
+                for _, line in pairs(lines) do line.Visible = false end
+                for _, outline in pairs(outlines) do outline.Visible = false end
                 DistanceText.Visible = false
                 return
             end
 
-            local Distance = (Camera.CFrame.p - HumanoidRootPart.Position).Magnitude
+            local Distance = (Camera.CFrame.Position - HumanoidRootPart.Position).Magnitude
             if Distance > currentESPDistance then
-                for _, line in pairs(lines) do
-                    line.Visible = false
-                end
+                for _, line in pairs(lines) do line.Visible = false end
+                for _, outline in pairs(outlines) do outline.Visible = false end
                 DistanceText.Visible = false
                 return
             end
 
-            local scale_factor = 1 / (Target2dPosition.Z * math.tan(math.rad(Camera.FieldOfView * 0.5)) * 2) * 100
-            local width, height = math.floor(18 * scale_factor * 3), math.floor(28 * scale_factor * 3)
-            local x = Target2dPosition.X - width / 2
-            local y = Target2dPosition.Y - height / 2
+            local scaleFactor = 1 / (ScreenPosition.Z * math.tan(math.rad(Camera.FieldOfView / 2)) * 2) * 100
+            local boxWidth = 18 * scaleFactor * 3
+            local boxHeight = 28 * scaleFactor * 3
+            local x = ScreenPosition.X - boxWidth / 2
+            local y = ScreenPosition.Y - boxHeight / 2
+            local cornerLength = math.min(boxWidth, boxHeight) * 0.3
 
-            local cornerLength = math.min(width, height) * 0.3
-
-            TopLeftLineH.Visible = espEnabled and IsVisible
+            TopLeftLineH.Visible = espEnabled
             TopLeftLineH.From = Vector2.new(x, y)
             TopLeftLineH.To = Vector2.new(x + cornerLength, y)
 
-            TopLeftLineV.Visible = espEnabled and IsVisible
+            TopLeftLineV.Visible = espEnabled
             TopLeftLineV.From = Vector2.new(x, y)
             TopLeftLineV.To = Vector2.new(x, y + cornerLength)
 
-            TopRightLineH.Visible = espEnabled and IsVisible
-            TopRightLineH.From = Vector2.new(x + width, y)
-            TopRightLineH.To = Vector2.new(x + width - cornerLength, y)
+            TopRightLineH.Visible = espEnabled
+            TopRightLineH.From = Vector2.new(x + boxWidth, y)
+            TopRightLineH.To = Vector2.new(x + boxWidth - cornerLength, y)
 
-            TopRightLineV.Visible = espEnabled and IsVisible
-            TopRightLineV.From = Vector2.new(x + width, y)
-            TopRightLineV.To = Vector2.new(x + width, y + cornerLength)
+            TopRightLineV.Visible = espEnabled
+            TopRightLineV.From = Vector2.new(x + boxWidth, y)
+            TopRightLineV.To = Vector2.new(x + boxWidth, y + cornerLength)
 
-            BottomLeftLineH.Visible = espEnabled and IsVisible
-            BottomLeftLineH.From = Vector2.new(x, y + height)
-            BottomLeftLineH.To = Vector2.new(x + cornerLength, y + height)
+            BottomLeftLineH.Visible = espEnabled
+            BottomLeftLineH.From = Vector2.new(x, y + boxHeight)
+            BottomLeftLineH.To = Vector2.new(x + cornerLength, y + boxHeight)
 
-            BottomLeftLineV.Visible = espEnabled and IsVisible
-            BottomLeftLineV.From = Vector2.new(x, y + height)
-            BottomLeftLineV.To = Vector2.new(x, y + height - cornerLength)
+            BottomLeftLineV.Visible = espEnabled
+            BottomLeftLineV.From = Vector2.new(x, y + boxHeight)
+            BottomLeftLineV.To = Vector2.new(x, y + boxHeight - cornerLength)
 
-            BottomRightLineH.Visible = espEnabled and IsVisible
-            BottomRightLineH.From = Vector2.new(x + width, y + height)
-            BottomRightLineH.To = Vector2.new(x + width - cornerLength, y + height)
+            BottomRightLineH.Visible = espEnabled
+            BottomRightLineH.From = Vector2.new(x + boxWidth, y + boxHeight)
+            BottomRightLineH.To = Vector2.new(x + boxWidth - cornerLength, y + boxHeight)
 
-            BottomRightLineV.Visible = espEnabled and IsVisible
-            BottomRightLineV.From = Vector2.new(x + width, y + height)
-            BottomRightLineV.To = Vector2.new(x + width, y + height - cornerLength)
+            BottomRightLineV.Visible = espEnabled
+            BottomRightLineV.From = Vector2.new(x + boxWidth, y + boxHeight)
+            BottomRightLineV.To = Vector2.new(x + boxWidth, y + boxHeight - cornerLength)
+
+            for i, line in ipairs(lines) do
+                local outline = outlines[i]
+                outline.Visible = line.Visible
+                outline.From = line.From
+                outline.To = line.To
+            end
 
             if showDistance and espEnabled then
                 DistanceText.Text = string.format("%ds", math.floor(Distance))
-                DistanceText.Visible = IsVisible
-                DistanceText.Position = Vector2.new(x + width / 2, y - 13)  
+                DistanceText.Visible = true
+                DistanceText.Position = Vector2.new(x + boxWidth / 2, y - 15)
             else
                 DistanceText.Visible = false
             end
         else
-            for _, line in pairs(lines) do
-                line.Visible = false
-            end
+            for _, line in pairs(lines) do line.Visible = false end
+            for _, outline in pairs(outlines) do outline.Visible = false end
             DistanceText.Visible = false
-            if not Player then
-                for _, line in pairs(lines) do
-                    line:Remove()
-                end
-                DistanceText:Remove()
-                Updater:Disconnect()
-            end
         end
     end
 
-    Updater = RunService.RenderStepped:Connect(UpdateBox)
-    return {lines = lines, DistanceText = DistanceText}
+    RunService.RenderStepped:Connect(UpdateBox)
 end
+
 
 local function EnableBoxESP()
     for _, Player in pairs(Workspace:GetChildren()) do
