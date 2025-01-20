@@ -1,6 +1,6 @@
 local Workspace = game:GetService("Workspace")
 
-local leavesToDelete = {"Fir3_Leaves", "Birch1_Leaves", "Elm1_Leaves", "Palm1_Leaves"} 
+
 
 local function checkAndDeleteLeaves(obj)
     if table.find(leavesToDelete, obj.Name) then
