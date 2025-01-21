@@ -8,7 +8,7 @@ local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/addons/SaveManager.lua"))()
 
 local Window = Library:CreateWindow({
-    Title = 'feofelact - Trident Survival',
+    Title = 'feofelact - Trident Survival V4',
     Center = true, 
     AutoShow = true,
     TabPadding = 6,
@@ -29,7 +29,7 @@ if (not _G.Flags) then
         HitboxExpander = {
             Size = 10;
             Enabled = false;
-            Transparency = .7; 
+            Transparency = 0.7; 
             Part = "Torso"; 
         };
     };
@@ -38,7 +38,7 @@ end
 local espEnabled = false 
 local showDistance = false 
 local currentESPDistance = 1500 
-
+--fuck tooltip
 ESPSection:AddToggle('EnableBoxESP', {
     Text = 'CornerBox',
     Default = espEnabled,
@@ -50,7 +50,6 @@ end)
 ESPSection:AddToggle('ShowDistance', {
     Text = 'Distance',
     Default = showDistance,
-    Tooltip = 'Toggle the Distance ESP',
 }):OnChanged(function(state)
     showDistance = state
 end)
@@ -61,7 +60,6 @@ ESPSection:AddSlider('ESPDistance', {
     Max = 5000,
     Default = 1500,
     Rounding = 0,
-    Tooltip = 'Adjust ESP display distance',
 }):OnChanged(function(value)
     currentESPDistance = value
 end)
@@ -69,6 +67,7 @@ end)
 local distanceOffset = Vector2.new(0, -13)
 
 local function CreateBox(Player)
+    --main corner
     local TopLeftLineH = Drawing.new("Line")
     local TopLeftLineV = Drawing.new("Line")
     local TopRightLineH = Drawing.new("Line")
@@ -77,7 +76,7 @@ local function CreateBox(Player)
     local BottomLeftLineV = Drawing.new("Line")
     local BottomRightLineH = Drawing.new("Line")
     local BottomRightLineV = Drawing.new("Line")
-
+    --outline
     local OutlineTopLeftLineH = Drawing.new("Line")
     local OutlineTopLeftLineV = Drawing.new("Line")
     local OutlineTopRightLineH = Drawing.new("Line")
@@ -89,19 +88,19 @@ local function CreateBox(Player)
 
     local lines = {TopLeftLineH, TopLeftLineV, TopRightLineH, TopRightLineV, BottomLeftLineH, BottomLeftLineV, BottomRightLineH, BottomRightLineV}
     local outlines = {OutlineTopLeftLineH, OutlineTopLeftLineV, OutlineTopRightLineH, OutlineTopRightLineV, OutlineBottomLeftLineH, OutlineBottomLeftLineV, OutlineBottomRightLineH, OutlineBottomRightLineV}
-
+    --main line settings
     for _, line in pairs(lines) do
         line.Visible = false
         line.Color = Color3.fromRGB(0, 0, 0)
         line.Thickness = 4
     end
-
+    --outline settings
     for _, outline in pairs(outlines) do
         outline.Visible = false
         outline.Color = Color3.fromRGB(255, 255, 255)
         outline.Thickness = 2 
     end
-
+    --distance settings
     local DistanceText = Drawing.new("Text")
     DistanceText.Visible = false
     DistanceText.Color = Color3.fromRGB(255,99,71)
@@ -194,8 +193,7 @@ local function CreateBox(Player)
 
     RunService.RenderStepped:Connect(UpdateBox)
 end
-
-
+--udpater
 local function EnableBoxESP()
     for _, Player in pairs(Workspace:GetChildren()) do
         if Player:IsA("Model") and (Player:FindFirstChild("HumanoidRootPart") or Player:FindFirstChild("UpperTorso")) then
@@ -211,11 +209,10 @@ Workspace.ChildAdded:Connect(function(Player)
 end)
 
 EnableBoxESP()
-
+--fuck tooltip
 HitboxSection:AddToggle('EnableHitboxExpander', {
     Text = 'Enable Hitbox',
     Default = _G.Flags.HitboxExpander.Enabled,
-    Tooltip = 'Toggle hitbox',
 }):OnChanged(function(state)
     _G.Flags.HitboxExpander.Enabled = state
 end)
@@ -226,9 +223,18 @@ HitboxSection:AddSlider('HitboxSize', {
     Min = 1,
     Max = 15,
     Rounding = 1,
-    Tooltip = 'Adjust hitbox size',
 }):OnChanged(function(value)
     _G.Flags.HitboxExpander.Size = value
+end)
+
+HitboxSection:AddSlider('HitboxTransparency', {
+    Text = 'Transparency',
+    Default = _G.Flags.HitboxExpander.Transparency or 0.7, 
+    Min = 0, 
+    Max = 1, 
+    Rounding = 2,
+}):OnChanged(function(value)
+    _G.Flags.HitboxExpander.Transparency = value
 end)
 
 HitboxSection:AddDropdown('HitboxPartDropdown', {
