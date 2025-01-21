@@ -237,6 +237,13 @@ HitboxSection:AddSlider('HitboxTransparency', {
     _G.Flags.HitboxExpander.Transparency = value
 end)
 
+HitboxSection:AddToggle('CanColide', {
+    Text = 'CanCollide',
+    Default = false,
+}):OnChanged(function(state)
+    _G.Flags.HitboxExpander.CanCollide = state
+end)
+
 HitboxSection:AddDropdown('HitboxPartDropdown', {
     Text = '',
     Values = { 'Torso', 'Head' },
@@ -264,7 +271,7 @@ if (not _G.Loaded) then
         if (Hitbox.Enabled) then
             Part.Size = Vector3.new(Size, Size, Size) 
             Part.Transparency = Hitbox.Transparency
-            Part.CanCollide = false
+            Part.CanCollide = Hitbox.CanCollide
         else
             Part.Size = OriginalSizes[Hitbox.Part]
             Part.Transparency = 0
