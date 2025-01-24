@@ -8,7 +8,7 @@ local ThemeManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main/addons/SaveManager.lua"))()
 
 local Window = Library:CreateWindow({
-    Title = 'feofelact - Trident Survival V4',
+    Title = 'feofelact.gg - Trident Survival',
     Center = true, 
     AutoShow = true,
     TabPadding = 6,
