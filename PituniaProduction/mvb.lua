@@ -15,7 +15,7 @@ screenGui.ResetOnSpawn = false
 
 local openButton = Instance.new("TextButton", screenGui)
 openButton.Size = UDim2.new(0, 100, 0, 30)
-openButton.Position = UDim2.new(0.5, -75, 0, 10)
+openButton.Position = UDim2.new(0.5, -75, 0, -50)
 openButton.Text = "bit.hub"
 openButton.BackgroundColor3 = Color3.fromRGB(148, 87, 82)
 openButton.TextColor3 = Color3.fromRGB(255, 255, 255)
