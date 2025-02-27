@@ -3010,10 +3010,10 @@ function Library:CreateWindow(...)
     });
 
     local WindowLabel = Library:CreateLabel({
-        Position = UDim2.new(-1, 0, 0, 0),
+        Position = UDim2.new(0, 0, 0, 0),
         Size = UDim2.new(1.5, 0, 0, 29),
         Text = Config.Title or '';
-        TextXAlignment = Enum.TextXAlignment.Center,
+        TextXAlignment = Enum.TextXAlignment.Left,
         ZIndex = 2;
         Parent = Inner;
     });
