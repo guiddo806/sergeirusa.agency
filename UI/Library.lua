@@ -1994,6 +1994,8 @@ do
             Parent = Container;
         });
 
+        Slider.MaxSize = SliderOuter.AbsoluteSize.X - 2;
+
         Library:AddToRegistry(SliderOuter, {
             BorderColor3 = 'Black';
         });
@@ -2062,7 +2064,6 @@ do
 
         function Slider:Display()
             local Suffix = Info.Suffix or '';
-
             if Info.Compact then
                 DisplayLabel.Text = Info.Text .. ': ' .. Slider.Value .. Suffix
             elseif Info.HideMax then
@@ -2070,12 +2071,16 @@ do
             else
                 DisplayLabel.Text = string.format('%s/%s', Slider.Value .. Suffix, Slider.Max .. Suffix);
             end
-
+    
             local X = math.ceil(Library:MapValue(Slider.Value, Slider.Min, Slider.Max, 0, Slider.MaxSize));
             Fill.Size = UDim2.new(0, X, 1, 0);
-
             HideBorderRight.Visible = not (X == Slider.MaxSize or X == 0);
         end;
+
+        SliderOuter:GetPropertyChangedSignal('AbsoluteSize'):Connect(function()
+            Slider.MaxSize = SliderOuter.AbsoluteSize.X - 2;
+            Slider:Display();
+        end);
 
         function Slider:OnChanged(Func)
             Slider.Changed = Func;
@@ -2948,7 +2953,7 @@ function Library:CreateWindow(...)
     if type(Config.MenuFadeTime) ~= 'number' then Config.MenuFadeTime = 0.2 end
 
     if typeof(Config.Position) ~= 'UDim2' then Config.Position = UDim2.fromOffset(175, 50) end
-    if typeof(Config.Size) ~= 'UDim2' then Config.Size = UDim2.fromOffset(550, 600) end
+    if typeof(Config.Size) ~= 'UDim2' then Config.Size = UDim2.fromOffset(750, 600) end
 
     if Config.Center then
         Config.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -3203,7 +3208,6 @@ function Library:CreateWindow(...)
             local BoxInner = Library:Create('Frame', {
                 BackgroundColor3 = Library.BackgroundColor;
                 BorderColor3 = Color3.new(0, 0, 0);
-                -- BorderMode = Enum.BorderMode.Inset;
                 Size = UDim2.new(1, -2, 1, -2);
                 Position = UDim2.new(0, 1, 0, 1);
                 ZIndex = 4;
