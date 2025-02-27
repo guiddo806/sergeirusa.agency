@@ -2971,9 +2971,26 @@ function Library:CreateWindow(...)
         Position = Config.Position,
         Size = Config.Size,
         Visible = false;
-        ZIndex = 1;
+        ZIndex = 5;
         Parent = ScreenGui;
     });
+
+    local shadow = Instance.new('ImageLabel')
+    do 
+        shadow.AnchorPoint = Vector2.new(0.5, 0.5)
+        shadow.BackgroundTransparency = 1
+        shadow.BorderSizePixel = 0 
+        shadow.Image = 'rbxassetid://7331400934'
+        shadow.ImageColor3 = Color3.fromRGB(0, 0, 5)
+        shadow.Name = '#shadow'
+        shadow.Position = UDim2.fromScale(0.5, 0.5)
+        shadow.ScaleType = 'Slice'
+        shadow.Size = UDim2.new(1, 50, 1, 55) 
+        shadow.SliceCenter = Rect.new(40, 40, 260, 260)
+        shadow.SliceScale = 1
+        shadow.ZIndex = 4 
+        shadow.Parent = Outer
+    end
 
     Library:MakeDraggable(Outer, 25);
 
@@ -2983,7 +3000,7 @@ function Library:CreateWindow(...)
         BorderMode = Enum.BorderMode.Inset;
         Position = UDim2.new(0, 1, 0, 1);
         Size = UDim2.new(1, -2, 1, -2);
-        ZIndex = 1;
+        ZIndex = 6;
         Parent = Outer;
     });
 
