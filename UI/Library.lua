@@ -3070,7 +3070,7 @@ function Library:CreateWindow(...)
             Tabboxes = {};
         };
 
-        local TabButtonWidth = Library:GetTextBounds(Name, Library.Font, 16) + 20;
+        local TabButtonWidth = Library:GetTextBounds(Name, Library.Font, 16) + 30;
 
         local TabButton = Library:Create('Frame', {
             BackgroundColor3 = Library.BackgroundColor;
