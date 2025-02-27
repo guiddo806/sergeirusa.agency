@@ -2971,7 +2971,7 @@ function Library:CreateWindow(...)
         Position = Config.Position,
         Size = Config.Size,
         Visible = false;
-        ZIndex = 5;
+        ZIndex = 2;
         Parent = ScreenGui;
     });
 
@@ -2988,7 +2988,7 @@ function Library:CreateWindow(...)
         shadow.Size = UDim2.new(1, 50, 1, 55) 
         shadow.SliceCenter = Rect.new(40, 40, 260, 260)
         shadow.SliceScale = 1
-        shadow.ZIndex = 4 
+        shadow.ZIndex = 1 
         shadow.Parent = Outer
     end
 
@@ -3000,7 +3000,7 @@ function Library:CreateWindow(...)
         BorderMode = Enum.BorderMode.Inset;
         Position = UDim2.new(0, 1, 0, 1);
         Size = UDim2.new(1, -2, 1, -2);
-        ZIndex = 6;
+        ZIndex = 2;
         Parent = Outer;
     });
 
@@ -3014,7 +3014,7 @@ function Library:CreateWindow(...)
         Size = UDim2.new(1.5, 0, 0, 29),
         Text = Config.Title or '';
         TextXAlignment = Enum.TextXAlignment.Center,
-        ZIndex = 1;
+        ZIndex = 2;
         Parent = Inner;
     });
 
@@ -3023,7 +3023,7 @@ function Library:CreateWindow(...)
         BorderColor3 = Library.OutlineColor;
         Position = UDim2.new(0, 8, 0, 25);
         Size = UDim2.new(1, -16, 1, -33);
-        ZIndex = 1;
+        ZIndex = 2;
         Parent = Inner;
     });
 
@@ -3038,7 +3038,7 @@ function Library:CreateWindow(...)
         BorderMode = Enum.BorderMode.Inset;
         Position = UDim2.new(0, 0, 0, 0);
         Size = UDim2.new(1, 0, 1, 0);
-        ZIndex = 1;
+        ZIndex = 2;
         Parent = MainSectionOuter;
     });
 
@@ -3050,7 +3050,7 @@ function Library:CreateWindow(...)
         BackgroundTransparency = 1;
         Position = UDim2.new(0, 8, 0, 8);
         Size = UDim2.new(1, -16, 0, 21);
-        ZIndex = 1;
+        ZIndex = 2;
         Parent = MainSectionInner;
     });
 
@@ -3093,7 +3093,7 @@ function Library:CreateWindow(...)
             BackgroundColor3 = Library.BackgroundColor;
             BorderColor3 = Library.OutlineColor;
             Size = UDim2.new(0, TabButtonWidth + 8 + 4, 1, 0),
-            ZIndex = 1;
+            ZIndex = 2;
             Parent = TabArea;
         });
 
@@ -3106,7 +3106,7 @@ function Library:CreateWindow(...)
             Position = UDim2.new(0, 0, 0, 0);
             Size = UDim2.new(1, 0, 1, -1),
             Text = Name;
-            ZIndex = 1;
+            ZIndex = 2;
             Parent = TabButton;
         });
 
@@ -3261,7 +3261,7 @@ function Library:CreateWindow(...)
                 BackgroundTransparency = 1;
                 Position = UDim2.new(0, 4, 0, 20);
                 Size = UDim2.new(1, -4, 1, -20);
-                ZIndex = 1;
+                ZIndex = 2;
                 Parent = BoxInner;
             });
 
